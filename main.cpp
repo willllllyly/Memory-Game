@@ -4,7 +4,7 @@
 
 // Functions
 void init();
-void OpenGraphic();
+void LoadingScreen();
 void HowToPlay();
 void ModeSelect();
 void ModeEasy();
@@ -36,13 +36,11 @@ int main() {
             State = !State;
             GreenLED = State;
             init(); // Initialise the device and certain objects
-            OpenGraphic();
+            LoadingScreen();
             //HowToPlay();
             //ModeSelect();
         }
-        lcd.setBrightness(0.0);
-        lcd.clear();
-        lcd.refresh();
+
         sleep();    
     }
 }
@@ -59,8 +57,21 @@ void init() {
     lcd.clear();
 }
 
-void OpenGraphic() {
-    
+void LoadingScreen() {
+    lcd.drawRect(6,24,72,10,FILL_TRANSPARENT);
+    lcd.printString(" GAME LOADING ",0,1);
+    lcd.refresh();
+    ThisThread::sleep_for(500ms);
+    int i;
+    int x;
+    for (i = 7; i <= 70; i+=9) {
+        lcd.drawRect(7,25,i,8,FILL_BLACK);
+        lcd.refresh();
+        int x = i*20;
+        ThisThread::sleep_for(std::chrono::milliseconds(x));
+    }
+    ThisThread::sleep_for(500ms);
+
 }
 
 
