@@ -27,11 +27,28 @@ PwmOut buzzer(PC_8);
 
 int main() {
     
-    init(); // Initialise the device and certain objects
-    OpenGraphic();
-    //HowToPlay();
-    //ModeSelect();
+    Button.rise(&Button_isr);
+    GreenLED = State;
 
+    while(1) {
+        if (ButtonFlag) {
+            ButtonFlag = 0;
+            State = !State;
+            GreenLED = State;
+            init(); // Initialise the device and certain objects
+            OpenGraphic();
+            //HowToPlay();
+            //ModeSelect();
+        }
+        lcd.setBrightness(0.0);
+        lcd.clear();
+        lcd.refresh();
+        sleep();    
+    }
+}
+
+void Button_isr() {
+    ButtonFlag = 1; // Set the flag in isr
 }
 
 void init() {
@@ -43,7 +60,7 @@ void init() {
 }
 
 void OpenGraphic() {
-
+    
 }
 
 
