@@ -71,22 +71,35 @@ void LoadingScreen() {
         ThisThread::sleep_for(std::chrono::milliseconds(x));
     }
     ThisThread::sleep_for(500ms);
-
+    
 }
 
 void HowToPlay() {
-    int i;
-    for (i = 5; i >= 0; i--) {
-        lcd.printString(" HOW TO PLAY",i-5,1);
-        lcd.printString("==============",i-4,1);
-        lcd.printString("Using the joy ",i-3,1);
-        lcd.printString(" stick button:",i-2,1);
-        lcd.printString("  select the",i-1,1);
-        lcd.printString("matching pairs",i,1);
-        lcd.refresh();
-        ThisThread::sleep_for(700ms);
-        
- 
+    int i = 5;
+    lcd.printString(" HOW TO PLAY",i-5,1);
+    lcd.printString("==============",i-4,1);
+    lcd.printString("Using the joy ",i-3,1);
+    lcd.printString(" stick button:",i-2,1);
+    lcd.printString("  select the",i-1,1);
+    lcd.printString("matching pairs",i,1);
+    lcd.refresh();
+    ThisThread::sleep_for(1000ms);
+    i = i-1;
+    lcd.printString(" of cards to",i+1,1);
+    lcd.refresh();
+    ThisThread::sleep_for(200ms);
+    i = i-1;
+    lcd.printString(" win the game.",i+2,1);
+    lcd.refresh();
+    ThisThread::sleep_for(200ms);
+    i = i-1;
+    lcd.printString("You have three",i+3,1);
+    int j = 0;
+    while (j <= 5) {
+    lcd.refresh();
+    ThisThread::sleep_for(200ms);
+    i = i-1;
+    j++;
     }
 }
 
