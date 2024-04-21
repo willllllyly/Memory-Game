@@ -71,29 +71,29 @@ void LoadingScreen() {
         ThisThread::sleep_for(std::chrono::milliseconds(x));
     }
     ThisThread::sleep_for(500ms);
-    
+
 }
 
 void HowToPlay() {
     int i = 5;
-    lcd.printString(" HOW TO PLAY",i-5,1);
-    lcd.printString("==============",i-4,1);
-    lcd.printString("Using the joy ",i-3,1);
-    lcd.printString(" stick button:",i-2,1);
-    lcd.printString("  select the",i-1,1);
-    lcd.printString("matching pairs",i,1);
+    lcd.printString(" HOW TO PLAY",0,i-5);
+    lcd.printString("==============",0,i-4);
+    lcd.printString("Using the joy ",0,i-3);
+    lcd.printString(" stick button:",0,i-2);
+    lcd.printString("  select the",0,i-1);
+    lcd.printString("matching pairs",0,i);
     lcd.refresh();
     ThisThread::sleep_for(1000ms);
     i = i-1;
-    lcd.printString(" of cards to",i+1,1);
+    lcd.printString(" of cards to",0,i+1);
     lcd.refresh();
     ThisThread::sleep_for(200ms);
     i = i-1;
-    lcd.printString(" win the game.",i+2,1);
+    lcd.printString(" win the game.",0,i+2);
     lcd.refresh();
     ThisThread::sleep_for(200ms);
     i = i-1;
-    lcd.printString("You have three",i+3,1);
+    lcd.printString("You have three",0,i+3);
     int j = 0;
     while (j <= 5) {
     lcd.refresh();
@@ -101,6 +101,15 @@ void HowToPlay() {
     i = i-1;
     j++;
     }
+}
+
+void ModeSelect() {
+    lcd.printString("  SELECT YOUR",0,0);
+    lcd.printString("   GAME MODE",0,1);
+    lcd.printString("==============",0,2);
+    lcd.printString(" ----EASY----",0,3);
+    lcd.printString(" ---MEDIUM---",0,4);
+    lcd.printString(" ----HARD----",0,5);
 }
 
 
