@@ -142,6 +142,7 @@ void LoadingScreen() {
 
 void HowToPlay() {
     int i = 5;
+    lcd.clear();
     lcd.printString(" HOW TO PLAY",0,i-5);
     lcd.printString("==============",0,i-4);
     lcd.printString("Using the joy ",0,i-3);
@@ -150,22 +151,27 @@ void HowToPlay() {
     lcd.printString("matching pairs",0,i);
     lcd.refresh();
     ThisThread::sleep_for(1000ms);
-    i = i-1;
-    lcd.printString(" of cards to",0,i+1);
-    lcd.refresh();
-    ThisThread::sleep_for(200ms);
-    i = i-1;
-    lcd.printString(" win the game.",0,i+2);
-    lcd.refresh();
-    ThisThread::sleep_for(200ms);
-    i = i-1;
-    lcd.printString("You have three",0,i+3);
-    int j = 0;
-    while (j <= 5) {
-    lcd.refresh();
-    ThisThread::sleep_for(200ms);
-    i = i-1;
-    j++;
+    for (i=4; i>=-4; i--) {
+        lcd.printString(" HOW TO PLAY",0,i-5);
+        lcd.printString("==============",0,i-4);
+        lcd.printString("Using the joy ",0,i-3);
+        lcd.printString(" stick button:",0,i-2);
+        lcd.printString("  select the  ",0,i-1);
+        lcd.printString("matching pairs",0,i);
+        lcd.printString(" of cards to  ",0,i+1);
+        lcd.refresh();
+        ThisThread::sleep_for(150ms);
+        lcd.printString(" win the game.",0,i+2);
+        lcd.refresh();
+        ThisThread::sleep_for(150ms);
+        lcd.printString("You have three",0,i+3);
+        lcd.refresh();
+        ThisThread::sleep_for(150ms);
+        lcd.printString("    lives     ",0,i+4);
+        lcd.refresh();
+        ThisThread::sleep_for(150ms);
+        lcd.printString("              ",0,i+5);
+        lcd.refresh();
     }
 }
 
