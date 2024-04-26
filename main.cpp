@@ -239,6 +239,7 @@ int main() {
             LoadingScreen();
             HowToPlay();
             ModeSelect();
+           // ModeEasy();
         }
 
         sleep();    
@@ -279,7 +280,7 @@ void HowToPlay() {
     lcd.printString("Using the joy ",0,i-3);
     lcd.printString(" stick button:",0,i-2);
     lcd.printString("  select the",0,i-1);
-    lcd.printString("matching pairs",0,i);
+    lcd.printString("matching cards",0,i);
     lcd.refresh();
     ThisThread::sleep_for(1000ms);
     for (i=4; i>=-4; i--) {
@@ -288,7 +289,7 @@ void HowToPlay() {
         lcd.printString("Using the joy ",0,i-3);
         lcd.printString(" stick button:",0,i-2);
         lcd.printString("  select the  ",0,i-1);
-        lcd.printString("matching pairs",0,i);
+        lcd.printString("matching cards",0,i);
         lcd.printString(" of cards to  ",0,i+1);
         lcd.refresh();
         ThisThread::sleep_for(150ms);
@@ -315,6 +316,16 @@ void ModeSelect() {
     lcd.printString(" ----HARD----",0,5);
     lcd.refresh();
     ThisThread::sleep_for(1000ms);
+}
+void ModeEasy() {
+    lcd.clear();
+    lcd.drawSprite(9,5,14,11,(int *)Hearts);
+    lcd.drawSprite(9,29,14,11,(int *)Diamonds);
+    lcd.drawSprite(37,5,14,11,(int *)Clubs);
+    lcd.drawSprite(37,29,14,11,(int *)Hearts);
+    lcd.drawSprite(65,5,14,11,(int *)Diamonds);
+    lcd.drawSprite(65,29,14,11,(int *)Clubs);
+    lcd.refresh();
 }
 void TurnCardDiamonds() {
     lcd.drawSprite(13,16,14,11,(int *)Back1);
