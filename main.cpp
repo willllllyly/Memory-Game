@@ -11,6 +11,10 @@ void ModeEasy();
 void ModeMedium();
 void ModeHard();
 void Button_isr();
+void TurnCardDiamonds();
+void TurnCardHearts();
+void TurnCardSpades();
+void TurnCardClubs();
 volatile int ButtonFlag = 0; //Flag for turning it on and off
 int State = 0;
 
@@ -42,7 +46,6 @@ const int Diamonds[14][11]={
     {1,0,0,0,0,0,0,0,0,0,1},
     {1,1,1,1,1,1,1,1,1,1,1},
 };
-
 const int Hearts[14][11]={
     {1,1,1,1,1,1,1,1,1,1,1},
     {1,0,0,0,0,0,0,0,0,0,1},
@@ -59,7 +62,6 @@ const int Hearts[14][11]={
     {1,0,0,0,0,0,0,0,0,0,1},
     {1,1,1,1,1,1,1,1,1,1,1},
 };
-
 const int Spades[14][11]={
     {1,1,1,1,1,1,1,1,1,1,1},
     {1,0,0,0,0,0,0,0,0,0,1},
@@ -76,7 +78,6 @@ const int Spades[14][11]={
     {1,0,0,0,0,0,0,0,0,0,1},
     {1,1,1,1,1,1,1,1,1,1,1},
 };
-
 const int Clubs[14][11]={
     {1,1,1,1,1,1,1,1,1,1,1},
     {1,0,0,0,0,0,0,0,0,0,1},
@@ -92,6 +93,136 @@ const int Clubs[14][11]={
     {1,0,0,1,1,0,1,1,0,0,1},
     {1,0,0,0,0,0,0,0,0,0,1},
     {1,1,1,1,1,1,1,1,1,1,1},
+};
+
+// Different sprites to animate the turning of the card
+const int Back1[14][11]={
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+};
+const int Back2[14][11]={
+    {1,1,1,1,1,1,1,1,0,0,0},
+    {1,1,1,1,1,1,1,1,1,0,0},
+    {1,1,1,1,1,1,1,1,1,1,0},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {0,1,1,1,1,1,1,1,1,1,1},
+    {0,0,1,1,1,1,1,1,1,1,1},
+    {0,0,0,1,1,1,1,1,1,1,1},
+};
+const int Back3[14][11]={
+    {1,1,1,1,1,1,0,0,0,0,0},
+    {1,1,1,1,1,1,1,0,0,0,0},
+    {1,1,1,1,1,1,1,1,0,0,0},
+    {1,1,1,1,1,1,1,1,1,0,0},
+    {1,1,1,1,1,1,1,1,1,1,0},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {1,1,1,1,1,1,1,1,1,1,1},
+    {0,1,1,1,1,1,1,1,1,1,1},
+    {0,0,1,1,1,1,1,1,1,1,1},
+    {0,0,0,1,1,1,1,1,1,1,1},
+    {0,0,0,0,1,1,1,1,1,1,1},
+    {0,0,0,0,0,1,1,1,1,1,1},
+};
+const int Back4[14][11]={
+    {1,1,1,1,0,0,0,0,0,0,0},
+    {1,1,1,1,1,0,0,0,0,0,0},
+    {1,1,1,1,1,1,0,0,0,0,0},
+    {1,1,1,1,1,1,1,0,0,0,0},
+    {1,1,1,1,1,1,1,1,1,0,0},
+    {1,1,1,1,1,1,1,1,1,1,0},
+    {0,1,1,1,1,1,1,1,1,1,1},
+    {0,1,1,1,1,1,1,1,1,1,1},
+    {0,0,1,1,1,1,1,1,1,1,1},
+    {0,0,1,1,1,1,1,1,1,1,1},
+    {0,0,0,1,1,1,1,1,1,1,1},
+    {0,0,0,0,1,1,1,1,1,1,1},
+    {0,0,0,0,0,1,1,1,1,1,1},
+    {0,0,0,0,0,0,1,1,1,1,1},
+};
+const int Front1[14][11]={
+    {1,1,1,1,1,1,1,1,0,0,0},
+    {1,0,0,0,0,0,0,0,1,0,0},
+    {1,0,0,0,0,0,0,0,0,1,0},
+    {1,0,0,0,0,0,0,0,0,0,1},
+    {1,0,0,0,0,0,0,0,0,0,1},
+    {1,0,0,0,0,0,0,0,0,0,1},
+    {1,0,0,0,0,0,0,0,0,0,1},
+    {1,0,0,0,0,0,0,0,0,0,1},
+    {1,0,0,0,0,0,0,0,0,0,1},
+    {1,0,0,0,0,0,0,0,0,0,1},
+    {1,0,0,0,0,0,0,0,0,0,1},
+    {0,1,0,0,0,0,0,0,0,0,1},
+    {0,0,1,0,0,0,0,0,0,0,1},
+    {0,0,0,1,1,1,1,1,1,1,1},
+};
+const int Front2[14][11]={
+    {1,1,1,1,1,1,0,0,0,0,0},
+    {1,0,0,0,0,1,1,0,0,0,0},
+    {1,0,0,0,0,0,1,1,0,0,0},
+    {1,0,0,0,0,0,0,1,1,0,0},
+    {1,0,0,0,0,0,0,0,1,1,0},
+    {1,0,0,0,0,0,0,0,0,1,1},
+    {1,0,0,0,0,0,0,0,0,1,1},
+    {1,1,0,0,0,0,0,0,0,1,1},
+    {1,1,0,0,0,0,0,0,0,1,1},
+    {0,1,1,0,0,0,0,0,0,1,1},
+    {0,0,1,1,0,0,0,0,0,1,1},
+    {0,0,0,1,1,0,0,0,0,1,1},
+    {0,0,0,0,1,1,0,0,0,1,1},
+    {0,0,0,0,0,1,1,1,1,1,1},
+};
+const int Front3[14][11]={
+    {1,1,1,1,0,0,0,0,0,0,0},
+    {1,0,1,1,1,0,0,0,0,0,0},
+    {1,0,0,0,1,1,0,0,0,0,0},
+    {1,0,0,0,0,1,1,0,0,0,0},
+    {1,0,0,0,0,0,0,1,1,0,0},
+    {1,1,0,0,0,0,0,0,1,1,0},
+    {0,1,1,0,0,0,0,0,0,1,1},
+    {0,1,1,0,0,0,0,0,0,1,1},
+    {0,0,1,1,0,0,0,0,0,1,1},
+    {0,0,1,1,0,0,0,0,0,1,1},
+    {0,0,0,1,1,0,0,0,0,1,1},
+    {0,0,0,0,1,1,0,0,0,1,1},
+    {0,0,0,0,0,1,1,1,1,1,1},
+    {0,0,0,0,0,0,1,1,1,1,1},
+};
+const int Front4[14][11]={
+    {0,0,0,0,0,0,0,0,0,0,0},
+    {0,1,1,0,0,0,0,0,0,0,0},
+    {0,1,1,0,0,0,0,0,0,0,0},
+    {0,1,1,1,0,0,0,0,0,0,0},
+    {0,1,1,1,1,1,0,0,0,0,0},
+    {0,0,0,1,1,1,1,0,0,0,0},
+    {0,0,0,0,0,1,1,0,0,0,0},
+    {0,0,0,0,0,1,1,0,0,0,0},
+    {0,0,0,0,0,1,1,1,0,0,0},
+    {0,0,0,0,0,0,1,1,1,0,0},
+    {0,0,0,0,0,0,0,1,1,0,0},
+    {0,0,0,0,0,0,0,0,1,1,0},
+    {0,0,0,0,0,0,0,0,1,1,0},
+    {0,0,0,0,0,0,0,0,0,0,0},
 };
 
 int main() {
@@ -117,7 +248,6 @@ int main() {
 void Button_isr() {
     ButtonFlag = 1; // Set the flag in isr
 }
-
 void init() {
     Joystick.init();
     lcd.init(LPH7366_1);
@@ -125,7 +255,6 @@ void init() {
     lcd.setBrightness(0.5);
     lcd.clear();
 }
-
 void LoadingScreen() {
     lcd.drawRect(6,24,72,10,FILL_TRANSPARENT);
     lcd.printString(" GAME LOADING ",0,1);
@@ -142,7 +271,6 @@ void LoadingScreen() {
     ThisThread::sleep_for(500ms);
 
 }
-
 void HowToPlay() {
     int i = 5;
     lcd.clear();
@@ -177,7 +305,6 @@ void HowToPlay() {
         lcd.refresh();
     }
 }
-
 void ModeSelect() {
     lcd.clear();
     lcd.printString("  SELECT YOUR",0,0);
@@ -189,5 +316,115 @@ void ModeSelect() {
     lcd.refresh();
     ThisThread::sleep_for(1000ms);
 }
-
-
+void TurnCardDiamonds() {
+    lcd.drawSprite(13,16,14,11,(int *)Back1);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back2);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back3);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back4);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front4);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front3);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front2);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front1);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Diamonds);
+    lcd.refresh();    
+}
+void TurnCardHearts() {
+    lcd.drawSprite(13,16,14,11,(int *)Back1);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back2);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back3);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back4);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front4);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front3);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front2);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front1);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Hearts);
+    lcd.refresh();    
+}
+void TurnCardSpades() {
+    lcd.drawSprite(13,16,14,11,(int *)Back1);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back2);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back3);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back4);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front4);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front3);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front2);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front1);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Spades);
+    lcd.refresh();    
+}
+void TurnCardClubs() {
+    lcd.drawSprite(13,16,14,11,(int *)Back1);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back2);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back3);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back4);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front4);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front3);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front2);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front1);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Clubs);
+    lcd.refresh();    
+}
