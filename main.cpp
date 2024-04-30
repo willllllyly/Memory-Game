@@ -1,6 +1,8 @@
 #include "mbed.h"
 #include "Joystick.h"
-#include "N5110.h" 
+#include "N5110.h"
+#include <cstdlib>
+#include <ctime>
 
 // Functions
 void init();
@@ -16,7 +18,7 @@ void TurnCardHearts();
 void TurnCardSpades();
 void TurnCardClubs();
 void MenuSelect();
-double Randomiser();
+int Randomiser();
 volatile int ButtonFlag = 0; //Flag for turning it on and off
 int State = 0;
 
@@ -270,6 +272,11 @@ int main() {
     }
 }
 
+int Randomiser() {
+    srand((int)time(0));
+    int r = rand() % 40 + -20;
+    return r;
+}
 void Button_isr() {
     ButtonFlag = 1; // Set the flag in isr
 }
