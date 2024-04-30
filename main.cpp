@@ -261,11 +261,12 @@ int main() {
             State = !State;
             GreenLED = State;
             init(); // Initialise the device and certain objects
+            Randomiser();
            // LoadingScreen();
            // HowToPlay();
            // MenuSelect();
            // TurnCardDiamonds();           
-            ModeHard();
+            //ModeHard();
         }
 
         sleep();    
@@ -276,6 +277,7 @@ int Randomiser() {
     srand((int)time(0));
     int r = rand() % 40 + -20;
     return r;
+    
 }
 void Button_isr() {
     ButtonFlag = 1; // Set the flag in isr
@@ -349,13 +351,28 @@ void MenuScreen() {
 }
 void ModeEasy() {
     lcd.clear();
-    lcd.drawSprite(9,5,14,11,(int *)Hearts);
+    int choose = Randomiser();
+    if (choose < 0) {
+        if (choose % 2 == 0) {
+            lcd.print("Hearts");
+        } else {
+            lcd.print("Diamonds");
+        }
+    } else {
+        if (choose % 2 == 0) {
+            lcd.print("Clubs");
+        } else {
+            lcd.print("Spades");
+        }
+    
+
+    /*lcd.drawSprite(9,5,14,11,(int *)Hearts);
     lcd.drawSprite(9,29,14,11,(int *)Diamonds);
     lcd.drawSprite(37,5,14,11,(int *)Clubs);
     lcd.drawSprite(37,29,14,11,(int *)Hearts);
     lcd.drawSprite(65,5,14,11,(int *)Diamonds);
     lcd.drawSprite(65,29,14,11,(int *)Clubs);
-    lcd.refresh();
+    lcd.refresh();*/
 }
 void ModeMedium() {
     lcd.clear();
