@@ -6,7 +6,7 @@
 void init();
 void LoadingScreen();
 void HowToPlay();
-void ModeSelect();
+void MenuScreen();
 void ModeEasy();
 void ModeMedium();
 void ModeHard();
@@ -15,6 +15,7 @@ void TurnCardDiamonds();
 void TurnCardHearts();
 void TurnCardSpades();
 void TurnCardClubs();
+void ButtonSelect();
 volatile int ButtonFlag = 0; //Flag for turning it on and off
 int State = 0;
 
@@ -95,7 +96,7 @@ const int Clubs[14][11]={
     {1,1,1,1,1,1,1,1,1,1,1},
 };
 
-// Select Sprites
+// Select Sprite
 const int CardSelect[16][13]={
     {1,1,1,1,1,1,1,1,1,1,1,1,1},
     {1,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -113,13 +114,6 @@ const int CardSelect[16][13]={
     {1,0,0,0,0,0,0,0,0,0,0,0,1},
     {1,0,0,0,0,0,0,0,0,0,0,0,1},
     {1,1,1,1,1,1,1,1,1,1,1,1,1},
-};
-const int MenuSelect[5][6]={
-    {1,1,1,1,0,0},
-    {0,1,1,1,1,0},
-    {0,0,1,1,1,1},
-    {0,1,1,1,1,0},
-    {1,1,1,1,0,0},
 };
 
 // Different sprites to animate the turning of the card
@@ -264,10 +258,11 @@ int main() {
             State = !State;
             GreenLED = State;
             init(); // Initialise the device and certain objects
-            LoadingScreen();
-            HowToPlay();
-            ModeSelect();
-           // ModeEasy();
+           // LoadingScreen();
+           // HowToPlay();
+            ButtonSelect();
+           // TurnCardDiamonds();           
+            //ModeEasy();
         }
 
         sleep();    
@@ -320,21 +315,21 @@ void HowToPlay() {
         lcd.printString("matching cards",0,i);
         lcd.printString(" of cards to  ",0,i+1);
         lcd.refresh();
-        ThisThread::sleep_for(150ms);
+        ThisThread::sleep_for(200ms);
         lcd.printString(" win the game.",0,i+2);
         lcd.refresh();
-        ThisThread::sleep_for(150ms);
+        ThisThread::sleep_for(200ms);
         lcd.printString("You have three",0,i+3);
         lcd.refresh();
-        ThisThread::sleep_for(150ms);
+        ThisThread::sleep_for(200ms);
         lcd.printString("    lives     ",0,i+4);
         lcd.refresh();
-        ThisThread::sleep_for(150ms);
+        ThisThread::sleep_for(200ms);
         lcd.printString("              ",0,i+5);
         lcd.refresh();
     }
 }
-void ModeSelect() {
+void MenuScreen() {
     lcd.clear();
     lcd.printString("  SELECT YOUR",0,0);
     lcd.printString("   GAME MODE",0,1);
@@ -343,7 +338,6 @@ void ModeSelect() {
     lcd.printString(" ---MEDIUM---",0,4);
     lcd.printString(" ----HARD----",0,5);
     lcd.refresh();
-    ThisThread::sleep_for(1000ms);
 }
 void ModeEasy() {
     lcd.clear();
@@ -355,115 +349,145 @@ void ModeEasy() {
     lcd.drawSprite(65,29,14,11,(int *)Clubs);
     lcd.refresh();
 }
+void ModeMedium() {
+
+}
+void ModeHard() {
+
+}
 void TurnCardDiamonds() {
-    lcd.drawSprite(13,16,14,11,(int *)Back1);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back2);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back3);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back4);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front4);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front3);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front2);
+    lcd.drawSprite(13,16,14,11,(int *)Diamonds);
     lcd.refresh();
     ThisThread::sleep_for(150ms);
     lcd.drawSprite(13,16,14,11,(int *)Front1);
     lcd.refresh();
     ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Diamonds);
+    lcd.drawSprite(13,16,14,11,(int *)Front2);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front3);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front4);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back4);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back3);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back2);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back1);
     lcd.refresh();    
 }
 void TurnCardHearts() {
-    lcd.drawSprite(13,16,14,11,(int *)Back1);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back2);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back3);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back4);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front4);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front3);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front2);
+    lcd.drawSprite(13,16,14,11,(int *)Hearts);
     lcd.refresh();
     ThisThread::sleep_for(150ms);
     lcd.drawSprite(13,16,14,11,(int *)Front1);
     lcd.refresh();
     ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Hearts);
+    lcd.drawSprite(13,16,14,11,(int *)Front2);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front3);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front4);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back4);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back3);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back2);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back1);
     lcd.refresh();    
 }
 void TurnCardSpades() {
-    lcd.drawSprite(13,16,14,11,(int *)Back1);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back2);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back3);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back4);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front4);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front3);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front2);
+    lcd.drawSprite(13,16,14,11,(int *)Spades);
     lcd.refresh();
     ThisThread::sleep_for(150ms);
     lcd.drawSprite(13,16,14,11,(int *)Front1);
     lcd.refresh();
     ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Spades);
+    lcd.drawSprite(13,16,14,11,(int *)Front2);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front3);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front4);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back4);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back3);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back2);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back1);
     lcd.refresh();    
 }
 void TurnCardClubs() {
-    lcd.drawSprite(13,16,14,11,(int *)Back1);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back2);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back3);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back4);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front4);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front3);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front2);
+    lcd.drawSprite(13,16,14,11,(int *)Clubs);
     lcd.refresh();
     ThisThread::sleep_for(150ms);
     lcd.drawSprite(13,16,14,11,(int *)Front1);
     lcd.refresh();
     ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Clubs);
+    lcd.drawSprite(13,16,14,11,(int *)Front2);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front3);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Front4);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back4);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back3);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back2);
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
+    lcd.drawSprite(13,16,14,11,(int *)Back1);
     lcd.refresh();    
+}
+void ButtonSelect() {
+    int bank = 3;
+    MenuScreen();
+    lcd.printChar('>',6,bank);
+    lcd.refresh();
+    Direction Direc = Joystick.get_direction();
+    
+    switch (Direc){
+        default:{break;} 
+        case(N):{
+            switch(bank){
+                case(3):{
+                    bank = 5;
+                    break;
+                }
+                default:{bank--;
+                break;
+                }
+            }
+        }
+
+    }
+
 }
