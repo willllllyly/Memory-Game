@@ -15,7 +15,8 @@ void TurnCardDiamonds();
 void TurnCardHearts();
 void TurnCardSpades();
 void TurnCardClubs();
-void ButtonSelect();
+void MenuSelect();
+double Randomiser();
 volatile int ButtonFlag = 0; //Flag for turning it on and off
 int State = 0;
 
@@ -260,9 +261,9 @@ int main() {
             init(); // Initialise the device and certain objects
            // LoadingScreen();
            // HowToPlay();
-            ButtonSelect();
+           // MenuSelect();
            // TurnCardDiamonds();           
-            //ModeEasy();
+            ModeHard();
         }
 
         sleep();    
@@ -350,10 +351,30 @@ void ModeEasy() {
     lcd.refresh();
 }
 void ModeMedium() {
-
+    lcd.clear();
+    lcd.drawSprite(5,5,14,11,(int *)Hearts);
+    lcd.drawSprite(5,29,14,11,(int *)Diamonds);
+    lcd.drawSprite(26,5,14,11,(int *)Clubs);
+    lcd.drawSprite(26,29,14,11,(int *)Hearts);
+    lcd.drawSprite(47,5,14,11,(int *)Diamonds);
+    lcd.drawSprite(47,29,14,11,(int *)Clubs);
+    lcd.drawSprite(68,5,14,11,(int *)Diamonds);
+    lcd.drawSprite(68,29,14,11,(int *)Clubs);
+    lcd.refresh();
 }
 void ModeHard() {
-
+    lcd.clear();
+    lcd.drawSprite(4,5,14,11,(int *)Hearts);
+    lcd.drawSprite(4,29,14,11,(int *)Diamonds);
+    lcd.drawSprite(20,5,14,11,(int *)Clubs);
+    lcd.drawSprite(20,29,14,11,(int *)Hearts);
+    lcd.drawSprite(36,5,14,11,(int *)Diamonds);
+    lcd.drawSprite(36,29,14,11,(int *)Clubs);
+    lcd.drawSprite(52,5,14,11,(int *)Diamonds);
+    lcd.drawSprite(52,29,14,11,(int *)Clubs);
+    lcd.drawSprite(68,5,14,11,(int *)Diamonds);
+    lcd.drawSprite(68,29,14,11,(int *)Clubs);
+    lcd.refresh();
 }
 void TurnCardDiamonds() {
     lcd.drawSprite(13,16,14,11,(int *)Diamonds);
@@ -467,7 +488,7 @@ void TurnCardClubs() {
     lcd.drawSprite(13,16,14,11,(int *)Back1);
     lcd.refresh();    
 }
-void ButtonSelect() {
+void MenuSelect() {
     int bank = 3;
     MenuScreen();
     lcd.printChar('>',6,bank);
@@ -478,16 +499,20 @@ void ButtonSelect() {
         default:{break;} 
         case(N):{
             switch(bank){
-                case(3):{
-                    bank = 5;
-                    break;
-                }
-                default:{bank--;
-                break;
-                }
+                case(3):{bank = 5; break;}
+                default:{bank--; break;}
             }
         }
-
+        case(S):{
+            switch(bank){
+                case(5):{bank = 3; break;}
+                default:{bank++; break;}
+            }
+        }
     }
-
+    lcd.clear();
+    MenuScreen();
+    lcd.printChar('>',6,bank);    
+    lcd.refresh();
+    ThisThread::sleep_for(150ms);
 }
