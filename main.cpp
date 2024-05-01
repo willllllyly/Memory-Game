@@ -256,12 +256,12 @@ int main() {
 
     while(1) {
         if (ButtonFlag) {
-            ThisThread::sleep_for(150ms);
+            ThisThread::sleep_for(250ms);
             ButtonFlag = 0;
             State = !State;
             GreenLED = State;
             init(); // Initialise the device and certain objects
-            Randomiser();
+            ModeEasy();
            // LoadingScreen();
            // HowToPlay();
            // MenuSelect();
@@ -352,23 +352,28 @@ void MenuScreen() {
 void ModeEasy() {
     lcd.clear();
     int i;
-    for (i = 5; i <= 29; i=+24) {
-        int choose = Randomiser();
-        if (choose > 0) {
-            if (choose % 2 == 0) {
-                lcd.drawSprite(5,5,14,11,(int *)Hearts);
+    int j;
+    srand((int)time(0));
+    for (j = 9; j <= 65; j+=28) {   
+        for (i = 5; i <= 29; i+=24) {
+            int RanNum = rand() % 40 + -20; // Generates a new number each time the loop iterates
+            if (RanNum > 0) {
+                if (RanNum % 2 == 0) {
+                    lcd.drawSprite(j,i,14,11,(int *)Hearts);
+                } else {
+                    lcd.drawSprite(j,i,14,11,(int *)Spades);
+                }
             } else {
-                lcd.drawSprite(5,5,14,11,(int *)Spades);
-            }
-        } else {
-            if (choose % 2 == 0) {
-                lcd.drawSprite(5,5,14,11,(int *)Diamonds);
-            } else {
-                lcd.drawSprite(5,5,14,11,(int *)Clubs);
+                if (RanNum % 2 == 0) {
+                    lcd.drawSprite(j,i,14,11,(int *)Diamonds);
+                } else {
+                    lcd.drawSprite(j,i,14,11,(int *)Clubs);
+                }
             }
         }
+        lcd.refresh();
+        ThisThread::sleep_for(400ms);
     }
-
     /*lcd.drawSprite(9,5,14,11,(int *)Hearts);
     lcd.drawSprite(9,29,14,11,(int *)Diamonds);
     lcd.drawSprite(37,5,14,11,(int *)Clubs);
