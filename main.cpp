@@ -351,20 +351,23 @@ void MenuScreen() {
 }
 void ModeEasy() {
     lcd.clear();
-    int choose = Randomiser();
-    if (choose < 0) {
-        if (choose % 2 == 0) {
-            lcd.print("Hearts");
+    int i;
+    for (i = 5; i <= 29; i=+24) {
+        int choose = Randomiser();
+        if (choose > 0) {
+            if (choose % 2 == 0) {
+                lcd.drawSprite(5,5,14,11,(int *)Hearts);
+            } else {
+                lcd.drawSprite(5,5,14,11,(int *)Spades);
+            }
         } else {
-            lcd.print("Diamonds");
+            if (choose % 2 == 0) {
+                lcd.drawSprite(5,5,14,11,(int *)Diamonds);
+            } else {
+                lcd.drawSprite(5,5,14,11,(int *)Clubs);
+            }
         }
-    } else {
-        if (choose % 2 == 0) {
-            lcd.print("Clubs");
-        } else {
-            lcd.print("Spades");
-        }
-    
+    }
 
     /*lcd.drawSprite(9,5,14,11,(int *)Hearts);
     lcd.drawSprite(9,29,14,11,(int *)Diamonds);
