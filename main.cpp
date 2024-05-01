@@ -18,7 +18,6 @@ void TurnCardHearts();
 void TurnCardSpades();
 void TurnCardClubs();
 void MenuSelect();
-int Randomiser();
 volatile int ButtonFlag = 0; //Flag for turning it on and off
 int State = 0;
 
@@ -273,12 +272,6 @@ int main() {
     }
 }
 
-int Randomiser() {
-    srand((int)time(0));
-    int r = rand() % 40 + -20;
-    return r;
-    
-}
 void Button_isr() {
     ButtonFlag = 1; // Set the flag in isr
 }
@@ -359,28 +352,61 @@ void ModeEasy() {
             int RanNum = rand() % 40 + -20; // Generates a new number each time the loop iterates
             if (RanNum > 0) {
                 if (RanNum % 2 == 0) {
+                    lcd.drawSprite(j,i,14,11,(int *)Front1);
+                    lcd.refresh();
+                    ThisThread::sleep_for(150ms);
                     lcd.drawSprite(j,i,14,11,(int *)Hearts);
                 } else {
+                    lcd.drawSprite(j,i,14,11,(int *)Front1);
+                    lcd.refresh();
+                    ThisThread::sleep_for(150ms);
                     lcd.drawSprite(j,i,14,11,(int *)Spades);
                 }
             } else {
                 if (RanNum % 2 == 0) {
+                    lcd.drawSprite(j,i,14,11,(int *)Front1);
+                    lcd.refresh();
+                    ThisThread::sleep_for(150ms);
                     lcd.drawSprite(j,i,14,11,(int *)Diamonds);
                 } else {
+                    lcd.drawSprite(j,i,14,11,(int *)Front1);
+                    lcd.refresh();
+                    ThisThread::sleep_for(150ms);
                     lcd.drawSprite(j,i,14,11,(int *)Clubs);
                 }
             }
         }
         lcd.refresh();
-        ThisThread::sleep_for(400ms);
+        ThisThread::sleep_for(250ms);
     }
-    /*lcd.drawSprite(9,5,14,11,(int *)Hearts);
-    lcd.drawSprite(9,29,14,11,(int *)Diamonds);
-    lcd.drawSprite(37,5,14,11,(int *)Clubs);
-    lcd.drawSprite(37,29,14,11,(int *)Hearts);
-    lcd.drawSprite(65,5,14,11,(int *)Diamonds);
-    lcd.drawSprite(65,29,14,11,(int *)Clubs);
-    lcd.refresh();*/
+    ThisThread::sleep_for(2000ms);
+    for (j = 9; j <= 65; j+=28) {   
+        for (i = 5; i <= 29; i+=24) {    
+            lcd.drawSprite(j,i,14,11,(int *)Front1);
+            lcd.refresh();
+            ThisThread::sleep_for(100ms);
+            lcd.drawSprite(j,i,14,11,(int *)Front2);
+            lcd.refresh();
+            ThisThread::sleep_for(100ms);
+            lcd.drawSprite(j,i,14,11,(int *)Front3);
+            lcd.refresh();
+            ThisThread::sleep_for(100ms);
+            lcd.drawSprite(j,i,14,11,(int *)Front4);
+            lcd.refresh();
+            ThisThread::sleep_for(100ms);
+            lcd.drawSprite(j,i,14,11,(int *)Back4);
+            lcd.refresh();
+            ThisThread::sleep_for(100ms);
+            lcd.drawSprite(j,i,14,11,(int *)Back3);
+            lcd.refresh();
+            ThisThread::sleep_for(100ms);
+            lcd.drawSprite(j,i,14,11,(int *)Back2);
+            lcd.refresh();
+            ThisThread::sleep_for(100ms);
+            lcd.drawSprite(j,i,14,11,(int *)Back1);
+            lcd.refresh();
+        }
+    } 
 }
 void ModeMedium() {
     lcd.clear();
@@ -408,120 +434,15 @@ void ModeHard() {
     lcd.drawSprite(68,29,14,11,(int *)Clubs);
     lcd.refresh();
 }
-void TurnCardDiamonds() {
-    lcd.drawSprite(13,16,14,11,(int *)Diamonds);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front1);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front2);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front3);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front4);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back4);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back3);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back2);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back1);
-    lcd.refresh();    
-}
-void TurnCardHearts() {
-    lcd.drawSprite(13,16,14,11,(int *)Hearts);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front1);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front2);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front3);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front4);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back4);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back3);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back2);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back1);
-    lcd.refresh();    
-}
-void TurnCardSpades() {
-    lcd.drawSprite(13,16,14,11,(int *)Spades);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front1);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front2);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front3);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front4);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back4);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back3);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back2);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back1);
-    lcd.refresh();    
-}
-void TurnCardClubs() {
-    lcd.drawSprite(13,16,14,11,(int *)Clubs);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front1);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front2);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front3);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Front4);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back4);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back3);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back2);
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
-    lcd.drawSprite(13,16,14,11,(int *)Back1);
-    lcd.refresh();    
-}
 void MenuSelect() {
-    int bank = 3;
+    /*
+    State fsm[3] = {
+        {3,0.1,{1,2}},
+        {4,0.1,{2,1}},
+        {5,0.1,{0,2}},
+    };
+
+    //int bank = 3;
     MenuScreen();
     lcd.printChar('>',6,bank);
     lcd.refresh();
@@ -547,4 +468,5 @@ void MenuSelect() {
     lcd.printChar('>',6,bank);    
     lcd.refresh();
     ThisThread::sleep_for(150ms);
+*/
 }
