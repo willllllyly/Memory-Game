@@ -18,8 +18,10 @@ void TurnCardHearts();
 void TurnCardSpades();
 void TurnCardClubs();
 void MenuSelect();
+void MenuInput();
 volatile int ButtonFlag = 0; //Flag for turning it on and off
 int State = 0;
+int bank = 3;
 
 // Objects
 N5110 lcd(PC_7, PA_9, PB_10, PB_5, PB_3, PA_10);
@@ -541,12 +543,18 @@ void ModeHard() {
     }
 }
 void MenuSelect() {
-    int bank = 3;
     MenuScreen();
     lcd.printChar('>',6,bank);
     lcd.refresh();
+    MenuInput();
+    lcd.clear();
+    MenuScreen();
+    lcd.printChar('>',6,bank);
+    lcd.refresh();ThisThread::sleep_for(150ms);
+}
+void MenuInput() {
     Direction Direc = Joystick.get_direction();
-    
+
     switch (Direc){
         default:{break;} 
         case(N):{
@@ -564,9 +572,4 @@ void MenuSelect() {
             break;
         }
     }
-    lcd.clear();
-    MenuScreen();
-    lcd.printChar('>',6,bank);    
-    lcd.refresh();
-    ThisThread::sleep_for(150ms);
 }
