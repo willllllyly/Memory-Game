@@ -20,6 +20,9 @@ void TurnCardSpades();
 void TurnCardClubs();
 void MenuSelect();
 void MenuInput();
+void EasyInput();
+void MediumInput();
+void HardInput();
 void EasySelect();
 void MediumSelect();
 void HardSelect();
@@ -275,7 +278,7 @@ int main() {
             //HowToPlay();
            // MenuSelect();
            // TurnCardDiamonds();           
-            ModeEasy();
+            ModeMedium();
         }
 
         sleep();    
@@ -607,6 +610,43 @@ void MenuSelect() {
         break;
     }
 }
+void EasyInput(int* E_Sel_x, int*E_Sel_y) {
+    Direction Direc = Joystick.get_direction();
+
+    switch (Direc){ 
+        case(N):{
+            switch(*E_Sel_y){
+                case(3):{*E_Sel_y = 27; break;}
+                default:{*E_Sel_y -= 24; break;}
+            }
+            break;
+        }
+        case(S):{
+            switch(*E_Sel_y){
+                case(27):{*E_Sel_y = 3; break;}
+                default:{*E_Sel_y += 24; break;}
+            }
+            break;
+        }
+        case(E):{
+            switch(*E_Sel_x){
+                case(63):{*E_Sel_x = 7; break;}
+                default:{*E_Sel_x += 28; break;}
+            }
+            break;
+        }
+        case(W):{
+            switch(*E_Sel_x){
+                case(7):{*E_Sel_x = 63; break;}
+                default:{*E_Sel_x -= 28; break;}
+            }
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+}
 void EasySelect() {
     lcd.drawRect(7,3,15,18,FILL_TRANSPARENT);
     lcd.refresh();
@@ -617,6 +657,64 @@ void EasySelect() {
     ThisThread::sleep_for(250ms);
     lcd.drawRect(7,3,15,18,FILL_TRANSPARENT);
     lcd.refresh();
+
+    int E_Sel_x = 7;
+    int E_Sel_y = 3;
+
+    while(1) {
+        if(JoystickButtonFlag) {
+            ThisThread::sleep_for(250ms);
+            JoystickButtonFlag = 0;
+            break;
+        }
+        int Old_E_Sel_x = E_Sel_x;
+        int Old_E_Sel_y = E_Sel_y;
+        int Card_x = E_Sel_x + 2;
+        int Card_y = E_Sel_y + 2;
+        lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
+        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Back1);
+        EasyInput(&E_Sel_x,&E_Sel_y);
+        lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
+        lcd.refresh();
+        ThisThread::sleep_for(200ms);
+    }
+}
+void MediumInput(int* E_Sel_x, int*E_Sel_y) {
+    Direction Direc = Joystick.get_direction();
+
+    switch (Direc){ 
+        case(N):{
+            switch(*E_Sel_y){
+                case(3):{*E_Sel_y = 27; break;}
+                default:{*E_Sel_y -= 24; break;}
+            }
+            break;
+        }
+        case(S):{
+            switch(*E_Sel_y){
+                case(27):{*E_Sel_y = 3; break;}
+                default:{*E_Sel_y += 24; break;}
+            }
+            break;
+        }
+        case(E):{
+            switch(*E_Sel_x){
+                case(66):{*E_Sel_x = 3; break;}
+                default:{*E_Sel_x += 21; break;}
+            }
+            break;
+        }
+        case(W):{
+            switch(*E_Sel_x){
+                case(3):{*E_Sel_x = 66; break;}
+                default:{*E_Sel_x -= 21; break;}
+            }
+            break;
+        }
+        default: {
+            break;
+        }
+    }
 }
 void MediumSelect() {
     lcd.drawRect(3,3,15,18,FILL_TRANSPARENT);
@@ -628,6 +726,65 @@ void MediumSelect() {
     ThisThread::sleep_for(250ms);
     lcd.drawRect(3,3,15,18,FILL_TRANSPARENT);
     lcd.refresh();
+
+    int E_Sel_x = 3;
+    int E_Sel_y = 3;
+
+    while(1) {
+        if(JoystickButtonFlag) {
+            ThisThread::sleep_for(250ms);
+            JoystickButtonFlag = 0;
+            break;
+        }
+        int Old_E_Sel_x = E_Sel_x;
+        int Old_E_Sel_y = E_Sel_y;
+        int Card_x = E_Sel_x + 2;
+        int Card_y = E_Sel_y + 2;
+        lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
+        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Back1);
+        EasyInput(&E_Sel_x,&E_Sel_y);
+        lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
+        lcd.refresh();
+        ThisThread::sleep_for(200ms);
+    }
+}
+void HardInput(int* E_Sel_x, int*E_Sel_y) {
+    Direction Direc = Joystick.get_direction();
+
+    switch (Direc){ 
+        case(N):{
+            switch(*E_Sel_y){
+                case(3):{*E_Sel_y = 27; break;}
+                default:{*E_Sel_y -= 24; break;}
+            }
+            break;
+        }
+        case(S):{
+            switch(*E_Sel_y){
+                case(27):{*E_Sel_y = 3; break;}
+                default:{*E_Sel_y += 24; break;}
+            }
+            break;
+        }
+        case(E):{
+            switch(*E_Sel_x){
+                case(63):{*E_Sel_x = 7; break;}
+                default:{*E_Sel_x += 28; break;}
+            }
+            break;
+        }
+        case(W):{
+            switch(*E_Sel_x){
+                case(7):{*E_Sel_x = 63; break;}
+                default:{*E_Sel_x -= 28; break;}
+            }
+            break;
+        }
+        default: {
+            break;
+        }
+    }    
+    
 }
 void HardSelect() {
     lcd.drawRect(2,3,15,18,FILL_TRANSPARENT);
