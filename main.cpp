@@ -20,6 +20,9 @@ void TurnCardSpades();
 void TurnCardClubs();
 void MenuSelect();
 void MenuInput();
+void EasySelect();
+void MediumSelect();
+void HardSelect();
 volatile int ButtonFlag = 0; // Flag for turning it on and off
 volatile int JoystickButtonFlag = 0; // Flag for exiting MenuSelect into game mode 
 int State = 0;
@@ -101,24 +104,26 @@ const int Clubs[14][11]={
     {1,1,1,1,1,1,1,1,1,1,1},
 };
 
-// Select Sprite
-const int CardSelect[16][13]={
-    {1,1,1,1,1,1,1,1,1,1,1,1,1},
-    {1,0,0,0,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,0,0,0,1},
-    {1,0,0,0,0,0,0,0,0,0,0,0,1},
-    {1,1,1,1,1,1,1,1,1,1,1,1,1},
+// Blink ANimation Sprite
+const int CardBlink[18][15]={
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},  
 };
 
 // Different sprites to animate the turning of the card
@@ -267,10 +272,10 @@ int main() {
             init(); // Initialise the device and certain objects
            // ModeHard();
            // LoadingScreen();
-           // HowToPlay();
-            MenuSelect();
+            //HowToPlay();
+           // MenuSelect();
            // TurnCardDiamonds();           
-            //ModeHard();
+            ModeEasy();
         }
 
         sleep();    
@@ -413,7 +418,8 @@ void ModeEasy() {
             lcd.drawSprite(j,i,14,11,(int *)Back1);
             lcd.refresh();
         }
-    } 
+    }
+    EasySelect();
 }
 void ModeMedium() {
     lcd.clear();
@@ -480,6 +486,7 @@ void ModeMedium() {
             lcd.refresh();
         }
     }
+    MediumSelect();
 }
 void ModeHard() {
     lcd.clear();
@@ -546,6 +553,7 @@ void ModeHard() {
             lcd.refresh();
         }
     }
+    HardSelect();
 }
 void MenuInput(int* bank) {
     Direction Direc = Joystick.get_direction();
@@ -590,4 +598,45 @@ void MenuSelect() {
         lcd.refresh();
         ThisThread::sleep_for(150ms);
     }
+    switch (bank) {
+        case(3):{ModeEasy();break;}
+        break;
+        case(4):{ModeMedium();break;}
+        break;
+        case(5):{ModeHard();break;}
+        break;
+    }
+}
+void EasySelect() {
+    lcd.drawRect(7,3,15,18,FILL_TRANSPARENT);
+    lcd.refresh();
+    ThisThread::sleep_for(450ms);
+    lcd.drawSprite(7,3,18,15,(int *)CardBlink);
+    lcd.drawSprite(9,5,14,11,(int *)Back1);
+    lcd.refresh();
+    ThisThread::sleep_for(250ms);
+    lcd.drawRect(7,3,15,18,FILL_TRANSPARENT);
+    lcd.refresh();
+}
+void MediumSelect() {
+    lcd.drawRect(3,3,15,18,FILL_TRANSPARENT);
+    lcd.refresh();
+    ThisThread::sleep_for(450ms);
+    lcd.drawSprite(3,3,18,15,(int *)CardBlink);
+    lcd.drawSprite(5,5,14,11,(int *)Back1);
+    lcd.refresh();
+    ThisThread::sleep_for(250ms);
+    lcd.drawRect(3,3,15,18,FILL_TRANSPARENT);
+    lcd.refresh();
+}
+void HardSelect() {
+    lcd.drawRect(2,3,15,18,FILL_TRANSPARENT);
+    lcd.refresh();
+    ThisThread::sleep_for(450ms);
+    lcd.drawSprite(2,3,18,15,(int *)CardBlink);
+    lcd.drawSprite(4,5,14,11,(int *)Back1);
+    lcd.refresh();
+    ThisThread::sleep_for(250ms);
+    lcd.drawRect(2,3,15,18,FILL_TRANSPARENT);
+    lcd.refresh();
 }
