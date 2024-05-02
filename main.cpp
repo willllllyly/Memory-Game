@@ -13,21 +13,22 @@ void ModeEasy();
 void ModeMedium();
 void ModeHard();
 void Button_isr();
+void JoyButton_isr();
 void TurnCardDiamonds();
 void TurnCardHearts();
 void TurnCardSpades();
 void TurnCardClubs();
 void MenuSelect();
 void MenuInput();
-volatile int ButtonFlag = 0; //Flag for turning it on and off
+volatile int ButtonFlag = 0; // Flag for turning it on and off
+volatile int JoystickButtonFlag = 0; // Flag for exiting MenuSelect into game mode 
 int State = 0;
-int bank = 3;
 
 // Objects
 N5110 lcd(PC_7, PA_9, PB_10, PB_5, PB_3, PA_10);
-DigitalIn JoystickSwitch(PC_12); // Input for joystick switch
 Joystick Joystick(PC_1, PC_0);  // Joystick control
 InterruptIn Button(PC_10);
+InterruptIn Joystick_Button(PC_12);
 DigitalOut GreenLED(PC_3);
 DigitalOut RedLED1(PA_13);
 DigitalOut RedLED2(PA_14);
@@ -254,6 +255,8 @@ int main() {
     
     Button.rise(&Button_isr);
     GreenLED = State;
+    Joystick_Button.fall(&JoyButton_isr);
+    Joystick_Button.mode(PullUp);
 
     while(1) {
         if (ButtonFlag) {
@@ -276,6 +279,9 @@ int main() {
 
 void Button_isr() {
     ButtonFlag = 1; // Set the flag in isr
+}
+void JoyButton_isr() {
+    JoystickButtonFlag = 1;
 }
 void init() {
     Joystick.init();
@@ -312,7 +318,6 @@ void HowToPlay() {
     lcd.refresh();
     ThisThread::sleep_for(1000ms);
     for (i=4; i>=-4; i--) {
-        lcd.printString(" HOW TO PLAY",0,i-5);
         lcd.printString("==============",0,i-4);
         lcd.printString("Using the joy ",0,i-3);
         lcd.printString(" stick button:",0,i-2);
@@ -339,9 +344,9 @@ void MenuScreen() {
     lcd.printString("  SELECT YOUR",0,0);
     lcd.printString("   GAME MODE",0,1);
     lcd.printString("==============",0,2);
-    lcd.printString(" ----EASY----",0,3);
-    lcd.printString(" ---MEDIUM---",0,4);
-    lcd.printString(" ----HARD----",0,5);
+    lcd.printString("  ---EASY----",0,3);
+    lcd.printString("  --MEDIUM---",0,4);
+    lcd.printString("  ---HARD----",0,5);
     lcd.refresh();
 }
 void ModeEasy() {
@@ -542,34 +547,47 @@ void ModeHard() {
         }
     }
 }
-void MenuSelect() {
-    MenuScreen();
-    lcd.printChar('>',6,bank);
-    lcd.refresh();
-    MenuInput();
-    lcd.clear();
-    MenuScreen();
-    lcd.printChar('>',6,bank);
-    lcd.refresh();ThisThread::sleep_for(150ms);
-}
-void MenuInput() {
+void MenuInput(int* bank) {
     Direction Direc = Joystick.get_direction();
 
-    switch (Direc){
-        default:{break;} 
+    switch (Direc){ 
         case(N):{
-            switch(bank){
-                case(3):{bank = 5; break;}
-                default:{bank--; break;}
+            switch(*bank){
+                case(3):{*bank = 5; break;}
+                default:{(*bank)--; break;}
             }
             break;
         }
         case(S):{
-            switch(bank){
-                case(5):{bank = 3; break;}
-                default:{bank++; break;}
+            switch(*bank){
+                case(5):{*bank = 3; break;}
+                default:{(*bank)++; break;}
             }
             break;
         }
+        default: {
+            break;
+        }
+    }
+}
+void MenuSelect() {
+    MenuScreen();
+    lcd.printChar('>', 6, 3);
+    lcd.refresh();
+
+    int bank = 3;
+
+    while(1) {
+        if(JoystickButtonFlag) {
+            ThisThread::sleep_for(250ms);
+            JoystickButtonFlag = 0;
+            break;
+        }
+        MenuInput(&bank);
+        lcd.clear();
+        MenuScreen();
+        lcd.printChar('>', 6, bank);
+        lcd.refresh();
+        ThisThread::sleep_for(150ms);
     }
 }
