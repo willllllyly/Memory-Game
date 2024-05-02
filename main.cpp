@@ -397,6 +397,7 @@ void ModeEasy() {
 
     for(int k = 0; k < 6; k++){
         Card *temp = &E_CardArray[k];
+        //printf("Suit %d\n", temp->get_suit());
         if (temp->get_suit() == Hearts) {
             lcd.drawSprite(j,i,14,11,(int *)Front1);
             lcd.refresh();
@@ -433,6 +434,7 @@ void ModeEasy() {
             break;
         }
     }
+
 
     ThisThread::sleep_for(2000ms);
     
@@ -765,26 +767,30 @@ void EasySelect(Card E_CardArray[6]) {
    // }
     float SelCard_x = (Card_x / 28.0f) + (19.0/28.0);
     float SelCard_y = Card_y / 29.0f;
+    printf("Card x%d,\n", Card_x); // Print outside of the loop
+    printf("Card y%d,\n", Card_y);
+    printf("Card x%f,\n", SelCard_x); // Print outside of the loop
+    printf("Card y%f,\n", SelCard_y);
     if (SelCard_y == 1) {
         if (SelCard_x == 1) { // Card 2
-            TurnCard(Card_x, Card_y, E_CardArray[2].get_suit());
+            TurnCard(Card_x, Card_y, E_CardArray[1].get_suit());
         }
         else if (SelCard_x == 2) { // Card 4
-            TurnCard(Card_x, Card_y, E_CardArray[4].get_suit());
+            TurnCard(Card_x, Card_y, E_CardArray[3].get_suit());
         }
         else { // Card 6
-            TurnCard(Card_x, Card_y, E_CardArray[6].get_suit());
+            TurnCard(Card_x, Card_y, E_CardArray[5].get_suit());
         }
     }
     else {
         if (SelCard_x == 1) { // Card 1
-            TurnCard(Card_x, Card_y, E_CardArray[1].get_suit());
+            TurnCard(Card_x, Card_y, E_CardArray[2].get_suit());
         }
         else if (SelCard_x == 2) { // Card 3
-            TurnCard(Card_x, Card_y, E_CardArray[3].get_suit());
+            TurnCard(Card_x, Card_y, E_CardArray[4].get_suit());
         }
         else { // Card 5
-            TurnCard(Card_x, Card_y, E_CardArray[5].get_suit());
+            TurnCard(Card_x, Card_y, E_CardArray[6].get_suit());
         }
     }
     }    
