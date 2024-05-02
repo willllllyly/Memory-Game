@@ -815,6 +815,6 @@ void HardSelect() {
         HardInput(&H_Sel_x,&H_Sel_y);
         lcd.drawRect(H_Sel_x,H_Sel_y,15,18,FILL_TRANSPARENT);
         lcd.refresh();
-        ThisThread::sleep_for(200ms);
+        ThisThread::sleep_for(150ms);
     }
 }
