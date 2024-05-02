@@ -3,6 +3,7 @@
 #include "N5110.h"
 #include <cstdlib>
 #include <ctime>
+#include "Card.h"
 
 // Functions
 void init();
@@ -42,7 +43,7 @@ DigitalOut RedLED3(PA_15);
 PwmOut buzzer(PC_8);
 
 // Sprites
-const int Diamonds[14][11]={
+const int Diamond[14][11]={
     {1,1,1,1,1,1,1,1,1,1,1},
     {1,0,0,0,0,0,0,0,0,0,1},
     {1,0,0,0,0,0,0,0,0,0,1},
@@ -58,7 +59,7 @@ const int Diamonds[14][11]={
     {1,0,0,0,0,0,0,0,0,0,1},
     {1,1,1,1,1,1,1,1,1,1,1},
 };
-const int Hearts[14][11]={
+const int Heart[14][11]={
     {1,1,1,1,1,1,1,1,1,1,1},
     {1,0,0,0,0,0,0,0,0,0,1},
     {1,0,0,0,0,0,0,0,0,0,1},
@@ -74,7 +75,7 @@ const int Hearts[14][11]={
     {1,0,0,0,0,0,0,0,0,0,1},
     {1,1,1,1,1,1,1,1,1,1,1},
 };
-const int Spades[14][11]={
+const int Spade[14][11]={
     {1,1,1,1,1,1,1,1,1,1,1},
     {1,0,0,0,0,0,0,0,0,0,1},
     {1,0,0,0,0,1,0,0,0,0,1},
@@ -90,7 +91,7 @@ const int Spades[14][11]={
     {1,0,0,0,0,0,0,0,0,0,1},
     {1,1,1,1,1,1,1,1,1,1,1},
 };
-const int Clubs[14][11]={
+const int Club[14][11]={
     {1,1,1,1,1,1,1,1,1,1,1},
     {1,0,0,0,0,0,0,0,0,0,1},
     {1,0,0,0,1,1,1,0,0,0,1},
@@ -361,7 +362,6 @@ void ModeEasy() {
     lcd.clear();
     int i;
     int j;
-    srand((int)time(0));
     for (j = 9; j <= 65; j+=28) {   
         for (i = 5; i <= 29; i+=24) {
             int RanNum = rand() % 40 + -20; // Generates a new number each time the loop iterates
@@ -370,24 +370,24 @@ void ModeEasy() {
                     lcd.drawSprite(j,i,14,11,(int *)Front1);
                     lcd.refresh();
                     ThisThread::sleep_for(150ms);
-                    lcd.drawSprite(j,i,14,11,(int *)Hearts);
+                    lcd.drawSprite(j,i,14,11,(int *)Heart);
                 } else {
                     lcd.drawSprite(j,i,14,11,(int *)Front1);
                     lcd.refresh();
                     ThisThread::sleep_for(150ms);
-                    lcd.drawSprite(j,i,14,11,(int *)Spades);
+                    lcd.drawSprite(j,i,14,11,(int *)Spade);
                 }
             } else {
                 if (RanNum % 2 == 0) {
                     lcd.drawSprite(j,i,14,11,(int *)Front1);
                     lcd.refresh();
                     ThisThread::sleep_for(150ms);
-                    lcd.drawSprite(j,i,14,11,(int *)Diamonds);
+                    lcd.drawSprite(j,i,14,11,(int *)Diamond);
                 } else {
                     lcd.drawSprite(j,i,14,11,(int *)Front1);
                     lcd.refresh();
                     ThisThread::sleep_for(150ms);
-                    lcd.drawSprite(j,i,14,11,(int *)Clubs);
+                    lcd.drawSprite(j,i,14,11,(int *)Club);
                 }
             }
         }
