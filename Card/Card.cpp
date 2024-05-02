@@ -1,23 +1,25 @@
 #include "Card.h"
 
-Suit Card::get_suit() {
+void Card::set_suit() {
     srand((int)time(0));
-    int RanNum = rand() % 40 + -20;
+    int RanNum = rand() % 100 + -50;
 
-    Suit S;
 
     if (RanNum > 0) {
                 if (RanNum % 2 == 0) {
-                    S = Hearts;
+                    card_suit = Hearts;
                 } else {
-                    S =Spades;
+                    card_suit = Spades;
                 }
             } else {
                 if (RanNum % 2 == 0) {
-                    S = Diamonds;
+                    card_suit = Diamonds;
                 } else {
-                    S = Clubs;
+                    card_suit = Clubs;
                 }
             }
-    return S;
+}
+
+Suit Card::get_suit() {
+    return card_suit;
 }
