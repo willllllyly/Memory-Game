@@ -15,16 +15,13 @@ void ModeMedium();
 void ModeHard();
 void Button_isr();
 void JoyButton_isr();
-void TurnCardDiamonds();
-void TurnCardHearts();
-void TurnCardSpades();
-void TurnCardClubs();
+void TurnCard();
 void MenuSelect();
 void MenuInput();
 void EasyInput();
 void MediumInput();
 void HardInput();
-void EasySelect();
+void EasySelect(Card E_CardArray[6]);
 void MediumSelect();
 void HardSelect();
 volatile int ButtonFlag = 0; // Flag for turning it on and off
@@ -428,7 +425,7 @@ void ModeEasy() {
         lcd.refresh();
 
         i += 24;
-        
+
         if (i > 30) {
             i = 5; j+= 28;
         }
@@ -466,7 +463,7 @@ void ModeEasy() {
             lcd.refresh();
         }
     }
-    EasySelect();
+    EasySelect(&E_CardArray[6]);
 }
 void ModeMedium() {
     lcd.clear();
@@ -656,6 +653,39 @@ void MenuSelect() {
         break;
     }
 }
+void TurnCard(int Card_x, int Card_y, Suit suit) {
+    
+    if (suit == Hearts) {
+        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Front1);
+        lcd.refresh();
+        ThisThread::sleep_for(150ms);
+        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Heart);
+        lcd.refresh();
+    }
+    else if (suit == Spades) {
+        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Front1);
+        lcd.refresh();
+        ThisThread::sleep_for(150ms);
+        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Spade);
+        lcd.refresh();
+    }
+    else if (suit == Diamonds) {
+        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Front1);
+        lcd.refresh();
+        ThisThread::sleep_for(150ms);
+        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Diamond);
+        lcd.refresh();
+    }
+    else {
+        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Front1);
+        lcd.refresh();
+        ThisThread::sleep_for(150ms);
+        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Club);
+        lcd.refresh();
+    }
+
+    lcd.refresh();
+}
 void EasyInput(int* E_Sel_x, int*E_Sel_y) {
     Direction E_Direc = Joystick.get_direction();
 
@@ -693,7 +723,7 @@ void EasyInput(int* E_Sel_x, int*E_Sel_y) {
         }
     }
 }
-void EasySelect() {
+void EasySelect(Card E_CardArray[6]) {
     lcd.drawRect(7,3,15,18,FILL_TRANSPARENT);
     lcd.refresh();
     ThisThread::sleep_for(450ms);
@@ -706,24 +736,58 @@ void EasySelect() {
 
     int E_Sel_x = 7;
     int E_Sel_y = 3;
+    int Card_x = 0;
+    int Card_y = 0;
+
+    int E_Counter = 0;
 
     while(1) {
-        if(JoystickButtonFlag) {
-            ThisThread::sleep_for(250ms);
-            JoystickButtonFlag = 0;
-            break;
+        while(1) {
+            int Old_E_Sel_x = E_Sel_x;
+            int Old_E_Sel_y = E_Sel_y;
+            Card_x = E_Sel_x + 2;
+            Card_y = E_Sel_y + 2;
+            if(JoystickButtonFlag) {
+                ThisThread::sleep_for(250ms);
+                JoystickButtonFlag = 0;
+                break;
+            }
+            lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
+            lcd.drawSprite(Card_x,Card_y,14,11,(int *)Back1);
+            EasyInput(&E_Sel_x,&E_Sel_y);
+            lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
+            lcd.refresh();
+            ThisThread::sleep_for(200ms);
         }
-        int Old_E_Sel_x = E_Sel_x;
-        int Old_E_Sel_y = E_Sel_y;
-        int Card_x = E_Sel_x + 2;
-        int Card_y = E_Sel_y + 2;
-        lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
-        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Back1);
-        EasyInput(&E_Sel_x,&E_Sel_y);
-        lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
-        lcd.refresh();
-        ThisThread::sleep_for(200ms);
+
+ //   if(E_Counter > 3) {
+   //     break;
+   // }
+    float SelCard_x = (Card_x / 28.0f) + (19.0/28.0);
+    float SelCard_y = Card_y / 29.0f;
+    if (SelCard_y == 1) {
+        if (SelCard_x == 1) { // Card 2
+            TurnCard(Card_x, Card_y, E_CardArray[2].get_suit());
+        }
+        else if (SelCard_x == 2) { // Card 4
+            TurnCard(Card_x, Card_y, E_CardArray[4].get_suit());
+        }
+        else { // Card 6
+            TurnCard(Card_x, Card_y, E_CardArray[6].get_suit());
+        }
     }
+    else {
+        if (SelCard_x == 1) { // Card 1
+            TurnCard(Card_x, Card_y, E_CardArray[1].get_suit());
+        }
+        else if (SelCard_x == 2) { // Card 3
+            TurnCard(Card_x, Card_y, E_CardArray[3].get_suit());
+        }
+        else { // Card 5
+            TurnCard(Card_x, Card_y, E_CardArray[5].get_suit());
+        }
+    }
+    }    
 }
 void MediumInput(int* M_Sel_x, int*M_Sel_y) {
     Direction M_Direc = Joystick.get_direction();
