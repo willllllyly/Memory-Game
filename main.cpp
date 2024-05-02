@@ -278,7 +278,7 @@ int main() {
             //HowToPlay();
            // MenuSelect();
            // TurnCardDiamonds();           
-            ModeMedium();
+            ModeHard();
         }
 
         sleep();    
@@ -611,9 +611,9 @@ void MenuSelect() {
     }
 }
 void EasyInput(int* E_Sel_x, int*E_Sel_y) {
-    Direction Direc = Joystick.get_direction();
+    Direction E_Direc = Joystick.get_direction();
 
-    switch (Direc){ 
+    switch (E_Direc){ 
         case(N):{
             switch(*E_Sel_y){
                 case(3):{*E_Sel_y = 27; break;}
@@ -679,35 +679,35 @@ void EasySelect() {
         ThisThread::sleep_for(200ms);
     }
 }
-void MediumInput(int* E_Sel_x, int*E_Sel_y) {
-    Direction Direc = Joystick.get_direction();
+void MediumInput(int* M_Sel_x, int*M_Sel_y) {
+    Direction M_Direc = Joystick.get_direction();
 
-    switch (Direc){ 
+    switch (M_Direc){ 
         case(N):{
-            switch(*E_Sel_y){
-                case(3):{*E_Sel_y = 27; break;}
-                default:{*E_Sel_y -= 24; break;}
+            switch(*M_Sel_y){
+                case(3):{*M_Sel_y = 27; break;}
+                default:{*M_Sel_y -= 24; break;}
             }
             break;
         }
         case(S):{
-            switch(*E_Sel_y){
-                case(27):{*E_Sel_y = 3; break;}
-                default:{*E_Sel_y += 24; break;}
+            switch(*M_Sel_y){
+                case(27):{*M_Sel_y = 3; break;}
+                default:{*M_Sel_y += 24; break;}
             }
             break;
         }
         case(E):{
-            switch(*E_Sel_x){
-                case(66):{*E_Sel_x = 3; break;}
-                default:{*E_Sel_x += 21; break;}
+            switch(*M_Sel_x){
+                case(66):{*M_Sel_x = 3; break;}
+                default:{*M_Sel_x += 21; break;}
             }
             break;
         }
         case(W):{
-            switch(*E_Sel_x){
-                case(3):{*E_Sel_x = 66; break;}
-                default:{*E_Sel_x -= 21; break;}
+            switch(*M_Sel_x){
+                case(3):{*M_Sel_x = 66; break;}
+                default:{*M_Sel_x -= 21; break;}
             }
             break;
         }
@@ -727,8 +727,8 @@ void MediumSelect() {
     lcd.drawRect(3,3,15,18,FILL_TRANSPARENT);
     lcd.refresh();
 
-    int E_Sel_x = 3;
-    int E_Sel_y = 3;
+    int M_Sel_x = 3;
+    int M_Sel_y = 3;
 
     while(1) {
         if(JoystickButtonFlag) {
@@ -736,47 +736,47 @@ void MediumSelect() {
             JoystickButtonFlag = 0;
             break;
         }
-        int Old_E_Sel_x = E_Sel_x;
-        int Old_E_Sel_y = E_Sel_y;
-        int Card_x = E_Sel_x + 2;
-        int Card_y = E_Sel_y + 2;
-        lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
+        int Old_M_Sel_x = M_Sel_x;
+        int Old_M_Sel_y = M_Sel_y;
+        int Card_x = M_Sel_x + 2;
+        int Card_y = M_Sel_y + 2;
+        lcd.drawSprite(Old_M_Sel_x,Old_M_Sel_y,18,15,(int *)CardBlink);
         lcd.drawSprite(Card_x,Card_y,14,11,(int *)Back1);
-        EasyInput(&E_Sel_x,&E_Sel_y);
-        lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
+        MediumInput(&M_Sel_x,&M_Sel_y);
+        lcd.drawRect(M_Sel_x,M_Sel_y,15,18,FILL_TRANSPARENT);
         lcd.refresh();
         ThisThread::sleep_for(200ms);
     }
 }
-void HardInput(int* E_Sel_x, int*E_Sel_y) {
+void HardInput(int* H_Sel_x, int*H_Sel_y) {
     Direction Direc = Joystick.get_direction();
 
     switch (Direc){ 
         case(N):{
-            switch(*E_Sel_y){
-                case(3):{*E_Sel_y = 27; break;}
-                default:{*E_Sel_y -= 24; break;}
+            switch(*H_Sel_y){
+                case(3):{*H_Sel_y = 27; break;}
+                default:{*H_Sel_y -= 24; break;}
             }
             break;
         }
         case(S):{
-            switch(*E_Sel_y){
-                case(27):{*E_Sel_y = 3; break;}
-                default:{*E_Sel_y += 24; break;}
+            switch(*H_Sel_y){
+                case(27):{*H_Sel_y = 3; break;}
+                default:{*H_Sel_y += 24; break;}
             }
             break;
         }
         case(E):{
-            switch(*E_Sel_x){
-                case(63):{*E_Sel_x = 7; break;}
-                default:{*E_Sel_x += 28; break;}
+            switch(*H_Sel_x){
+                case(66):{*H_Sel_x = 2; break;}
+                default:{*H_Sel_x += 16; break;}
             }
             break;
         }
         case(W):{
-            switch(*E_Sel_x){
-                case(7):{*E_Sel_x = 63; break;}
-                default:{*E_Sel_x -= 28; break;}
+            switch(*H_Sel_x){
+                case(2):{*H_Sel_x = 66; break;}
+                default:{*H_Sel_x -= 16; break;}
             }
             break;
         }
@@ -796,4 +796,25 @@ void HardSelect() {
     ThisThread::sleep_for(250ms);
     lcd.drawRect(2,3,15,18,FILL_TRANSPARENT);
     lcd.refresh();
+
+    int H_Sel_x = 2;
+    int H_Sel_y = 3;
+
+    while(1) {
+        if(JoystickButtonFlag) {
+            ThisThread::sleep_for(250ms);
+            JoystickButtonFlag = 0;
+            break;
+        }
+        int Old_H_Sel_x = H_Sel_x;
+        int Old_H_Sel_y = H_Sel_y;
+        int Card_x = H_Sel_x + 2;
+        int Card_y = H_Sel_y + 2;
+        lcd.drawSprite(Old_H_Sel_x,Old_H_Sel_y,18,15,(int *)CardBlink);
+        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Back1);
+        HardInput(&H_Sel_x,&H_Sel_y);
+        lcd.drawRect(H_Sel_x,H_Sel_y,15,18,FILL_TRANSPARENT);
+        lcd.refresh();
+        ThisThread::sleep_for(200ms);
+    }
 }
