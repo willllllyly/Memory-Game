@@ -301,20 +301,18 @@ int main() {
                 RedLED3 = StateR3;
                 GreenLED = StateG;
                 init(); // Initialise the device and certain objects
-            // ModeHard();
-            // LoadingScreen();
-                //HowToPlay();
-            // MenuSelect();
-            // TurnCardDiamonds();           
-                ModeHard();
+                LoadingScreen();
+                HowToPlay();
+                MenuSelect();
             }
             else {
                 StateG = 0;
                 GreenLED = StateG;
                 StateR2 = 0;
-                StateR3 = 0;
+                StateR3 = 1;
                 RedLED2 = StateR2;
-                RedLED1 = StateR3;
+                RedLED1 = StateR2;
+                RedLED3 = StateR3;
                 lcd.clear();
                 lcd.refresh();
                 sleep(); 
@@ -366,6 +364,7 @@ void HowToPlay() {
     lcd.refresh();
     ThisThread::sleep_for(1000ms);
     for (i=4; i>=-4; i--) {
+        lcd.printString(" HOW TO PLAY",0,i-5);
         lcd.printString("==============",0,i-4);
         lcd.printString("Using the joy ",0,i-3);
         lcd.printString(" stick button:",0,i-2);
@@ -377,10 +376,10 @@ void HowToPlay() {
         lcd.printString(" win the game.",0,i+2);
         lcd.refresh();
         ThisThread::sleep_for(200ms);
-        lcd.printString("You have three",0,i+3);
+        lcd.printString(" You have ONE ",0,i+3);
         lcd.refresh();
         ThisThread::sleep_for(200ms);
-        lcd.printString("    lives     ",0,i+4);
+        lcd.printString("    life      ",0,i+4);
         lcd.refresh();
         ThisThread::sleep_for(200ms);
         lcd.printString("              ",0,i+5);
@@ -404,6 +403,8 @@ void WinScreen() {
     lcd.printString("   YOU WON",0,3);
     lcd.printString("  THE GAME!!",0,4);
     lcd.refresh();
+    ThisThread::sleep_for(1s);
+    MenuSelect();
 }
 void LossScreen() {
     lcd.clear();
@@ -411,7 +412,9 @@ void LossScreen() {
     lcd.printString("  GAME OVER",0,2);
     lcd.printString("==============",0,3);
     lcd.printString("   UNLUCKY",0,4);
-    lcd.refresh();    
+    lcd.refresh();
+    ThisThread::sleep_for(1s);
+    MenuSelect();  
 }
 void ModeEasy() {
     lcd.clear();
@@ -785,6 +788,12 @@ void MenuInput(int* bank) {
     }
 }
 void MenuSelect() {
+    StateR1 = 0;
+    StateR2 = 0;
+    StateR3 = 0;
+    RedLED1 = StateR1;
+    RedLED2 = StateR2;
+    RedLED3 = StateR3;    
     MenuScreen();
     lcd.printChar('>', 6, 3);
     lcd.refresh();
