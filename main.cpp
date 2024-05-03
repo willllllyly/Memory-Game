@@ -476,7 +476,7 @@ void ModeEasy() {
     for (int i = 0; i < 6; ++i) {
         printf("Card %d: %d\n", i, E_CardArray[i].get_suit());
     }
-    EasySelect(&E_CardArray[5]);
+    EasySelect(E_CardArray);
 }
 void ModeMedium() {
     lcd.clear();
@@ -737,6 +737,9 @@ void EasyInput(int* E_Sel_x, int*E_Sel_y) {
     }
 }
 void EasySelect(Card E_CardArray[5]) {
+    for (int i = 0; i < 6; ++i) {
+        printf("E_Sel_Card %d: %d\n", i, E_CardArray[i].get_suit());
+    }
     lcd.drawRect(7,3,15,18,FILL_TRANSPARENT);
     lcd.refresh();
     ThisThread::sleep_for(450ms);
@@ -780,29 +783,29 @@ void EasySelect(Card E_CardArray[5]) {
     float SelCard_y = Card_y / 29.0f;
     if (SelCard_y == 1) {
         if (SelCard_x == 1) { // Card 2
-            printf("Suit for card %d: %d\n", 2, E_CardArray[1].get_suit());
+            printf("Suit for card %d: %d\n", 1, E_CardArray[1].get_suit());
             TurnCard(Card_x, Card_y, E_CardArray[1].get_suit());
         }
         else if (SelCard_x == 2) { // Card 4
-            printf("Suit for card %d: %d\n", 4, E_CardArray[3].get_suit());
+            printf("Suit for card %d: %d\n", 3, E_CardArray[3].get_suit());
             TurnCard(Card_x, Card_y, E_CardArray[3].get_suit());
         }
         else { // Card 6
-            printf("Suit for card %d: %d\n", 6, E_CardArray[5].get_suit());
+            printf("Suit for card %d: %d\n", 5, E_CardArray[5].get_suit());
             TurnCard(Card_x, Card_y, E_CardArray[5].get_suit());
         }
     }
     else {
         if (SelCard_x == 1) { // Card 1
-            printf("Suit for card %d: %d\n", 1, E_CardArray[0].get_suit());
+            printf("Suit for card %d: %d\n", 0, E_CardArray[0].get_suit());
             TurnCard(Card_x, Card_y, E_CardArray[0].get_suit());
         }
         else if (SelCard_x == 2) { // Card 3
-            printf("Suit for card %d: %d\n", 3, E_CardArray[2].get_suit());
+            printf("Suit for card %d: %d\n", 2, E_CardArray[2].get_suit());
             TurnCard(Card_x, Card_y, E_CardArray[2].get_suit());
         }
         else { // Card 5
-            printf("Suit for card %d: %d\n", 5, E_CardArray[4].get_suit());
+            printf("Suit for card %d: %d\n", 4, E_CardArray[4].get_suit());
             TurnCard(Card_x, Card_y, E_CardArray[4].get_suit());
         }
     }
