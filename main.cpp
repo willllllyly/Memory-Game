@@ -736,7 +736,16 @@ void EasyInput(int* E_Sel_x, int*E_Sel_y) {
     }
 }
 void EasySelect(Card E_CardArray[5]) {
-    lcd.drawRect(7,3,15,18,FILL_TRANSPARENT);
+   lcd.drawLine(7,3,21,3,1);
+   lcd.refresh();
+   ThisThread::sleep_for(450ms);
+   lcd.drawLine(7,3,21,3,0);
+   lcd.refresh();
+   ThisThread::sleep_for(250ms);
+   lcd.drawLine(7,3,21,3,1);
+   lcd.refresh();
+   
+   /* lcd.drawRect(7,3,15,18,FILL_TRANSPARENT);
     lcd.refresh();
     ThisThread::sleep_for(450ms);
     lcd.drawSprite(7,3,18,15,(int *)CardBlink);
@@ -744,7 +753,7 @@ void EasySelect(Card E_CardArray[5]) {
     lcd.refresh();
     ThisThread::sleep_for(250ms);
     lcd.drawRect(7,3,15,18,FILL_TRANSPARENT);
-    lcd.refresh();
+    lcd.refresh();*/
 
     int E_Sel_x = 7;
     int E_Sel_y = 3;
@@ -771,20 +780,54 @@ void EasySelect(Card E_CardArray[5]) {
                 int Old_E_Sel_y = E_Sel_y;
                 Card_x = E_Sel_x + 2;
                 Card_y = E_Sel_y + 2;
+                float SelCard_x = (Card_x / 28.0f) + (19.0/28.0);
+                float SelCard_y = Card_y / 29.0f;
                 if(JoystickButtonFlag) {
                     ThisThread::sleep_for(250ms);
                     JoystickButtonFlag = 0;
                     Counter1++;
                     x1 = Card_x;
                     y1 = Card_y;
-                    break;
+                    if (SelCard_y == 1) {
+                        if (SelCard_x == 1) { // Card 2
+                            TurnCard(Card_x, Card_y, E_CardArray[1].get_suit());
+                            Card_one = E_CardArray[1].get_suit(); 
+                            ThisThread::sleep_for(100ms);                    
+                        }
+                        else if (SelCard_x == 2) { // Card 4
+                            TurnCard(Card_x, Card_y, E_CardArray[3].get_suit());
+                            Card_one = E_CardArray[3].get_suit();
+                            ThisThread::sleep_for(100ms); 
+                        }
+                        else { // Card 6
+                            TurnCard(Card_x, Card_y, E_CardArray[5].get_suit());
+                            Card_one = E_CardArray[5].get_suit();                           
+                            ThisThread::sleep_for(100ms); 
+                        }
+                    }   
+                    else {
+                        if (SelCard_x == 1) { // Card 1                        
+                            TurnCard(Card_x, Card_y, E_CardArray[0].get_suit());
+                            Card_one = E_CardArray[0].get_suit();
+                            ThisThread::sleep_for(100ms); 
+                        }
+                        else if (SelCard_x == 2) { // Card 3
+                            TurnCard(Card_x, Card_y, E_CardArray[2].get_suit());
+                            Card_one = E_CardArray[2].get_suit();
+                            ThisThread::sleep_for(100ms); 
+                        }
+                        else { // Card 5
+                            TurnCard(Card_x, Card_y, E_CardArray[4].get_suit());
+                            Card_one = E_CardArray[4].get_suit();
+                            ThisThread::sleep_for(100ms); 
+                        }
+                    }        
+                 break;
                 }
-                //lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
-                //lcd.drawSprite(Card_x,Card_y,14,11,(int *)Back1);
-                lcd.drawLine(E_Sel_x,E_Sel_y,E_Sel_x + 11,E_Sel_y,0;
+            
+                lcd.drawLine(Old_E_Sel_x,Old_E_Sel_y,Old_E_Sel_x + 14,Old_E_Sel_y,0);
                 EasyInput(&E_Sel_x,&E_Sel_y);
-                //lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
-                lcd.drawLine(E_Sel_x,E_Sel_y,E_Sel_x + 11,E_Sel_y,1);
+                lcd.drawLine(E_Sel_x,E_Sel_y,E_Sel_x + 14,E_Sel_y,1);
                 lcd.refresh();
                 ThisThread::sleep_for(200ms);
             }
@@ -800,153 +843,51 @@ void EasySelect(Card E_CardArray[5]) {
                     JoystickButtonFlag = 0;
                     x2 = Card_x;
                     y2 = Card_y;
-                    break;
-                }
-                if(Card_x == x1 && Card_y == y1) {
                     if (SelCard_y == 1) {
-                            if (SelCard_x == 1) { // Card 2
-                            // printf("Suit for card %d: %d\n", 1, E_CardArray[1].get_suit());
-                                lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
-                                TurnCard(Card_x, Card_y, E_CardArray[1].get_suit());
-                                Card_one = E_CardArray[1].get_suit(); 
-                                EasyInput(&E_Sel_x,&E_Sel_y);
-                                lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
-                                lcd.refresh();
-                                ThisThread::sleep_for(100ms);                    
-                            }
-                            else if (SelCard_x == 2) { // Card 4
-                            // printf("Suit for card %d: %d\n", 3, E_CardArray[3].get_suit());
-                                lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
-                                TurnCard(Card_x, Card_y, E_CardArray[3].get_suit());
-                                Card_one = E_CardArray[3].get_suit();
-                                EasyInput(&E_Sel_x,&E_Sel_y);
-                                lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
-                                lcd.refresh();
-                                ThisThread::sleep_for(100ms); 
-                            }
-                            else { // Card 6
-                            // printf("Suit for card %d: %d\n", 5, E_CardArray[5].get_suit());
-                                lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
-                                TurnCard(Card_x, Card_y, E_CardArray[5].get_suit());
-                                Card_one = E_CardArray[5].get_suit();
-                                EasyInput(&E_Sel_x,&E_Sel_y);
-                                lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
-                                lcd.refresh();
-                                ThisThread::sleep_for(100ms); 
-                            }
-                        }   
-                    else {
-                        if (SelCard_x == 1) { // Card 1
-                        // printf("Suit for card %d: %d\n", 0, E_CardArray[0].get_suit());
-                            lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
-                            TurnCard(Card_x, Card_y, E_CardArray[0].get_suit());
-                            Card_one = E_CardArray[0].get_suit();
-                            EasyInput(&E_Sel_x,&E_Sel_y);
-                            lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
-                            lcd.refresh();
-                            ThisThread::sleep_for(100ms); 
-                        }
-                        else if (SelCard_x == 2) { // Card 3
-                        //  printf("Suit for card %d: %d\n", 2, E_CardArray[2].get_suit());
-                            lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
-                            TurnCard(Card_x, Card_y, E_CardArray[2].get_suit());
-                            Card_one = E_CardArray[2].get_suit();
-                            EasyInput(&E_Sel_x,&E_Sel_y);
-                            lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
-                            lcd.refresh();
-                            ThisThread::sleep_for(100ms); 
-                        }
-                        else { // Card 5
-                        //   printf("Suit for card %d: %d\n", 4, E_CardArray[4].get_suit());
-                            lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
-                            TurnCard(Card_x, Card_y, E_CardArray[4].get_suit());
-                            Card_one = E_CardArray[4].get_suit();
-                            EasyInput(&E_Sel_x,&E_Sel_y);
-                            lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
-                            lcd.refresh();
-                            ThisThread::sleep_for(100ms); 
-                        }
-                    }        
-                }
-                else {
-                    lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
-                    lcd.drawSprite(Card_x,Card_y,14,11,(int *)Back1);
-                    EasyInput(&E_Sel_x,&E_Sel_y);
-                    lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
-                    lcd.refresh();
-                    ThisThread::sleep_for(200ms);
-                } 
-            }
-            int Old_E_Sel_x = E_Sel_x;
-            int Old_E_Sel_y = E_Sel_y;
-            Card_x = E_Sel_x + 2;
-            Card_y = E_Sel_y + 2;
-            float SelCard_x = (Card_x / 28.0f) + (19.0/28.0);
-            float SelCard_y = Card_y / 29.0f;
-            if (SelCard_y == 1) {
                         if (SelCard_x == 1) { // Card 2
-                        // printf("Suit for card %d: %d\n", 1, E_CardArray[1].get_suit());
-                            lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
                             TurnCard(Card_x, Card_y, E_CardArray[1].get_suit());
-                            Card_two = E_CardArray[1].get_suit();
-                            EasyInput(&E_Sel_x,&E_Sel_y);
-                            lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
-                            lcd.refresh();
+                            Card_two = E_CardArray[1].get_suit(); 
                             ThisThread::sleep_for(100ms);                    
                         }
                         else if (SelCard_x == 2) { // Card 4
-                        // printf("Suit for card %d: %d\n", 3, E_CardArray[3].get_suit());
-                            lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
                             TurnCard(Card_x, Card_y, E_CardArray[3].get_suit());
                             Card_two = E_CardArray[3].get_suit();
-                            EasyInput(&E_Sel_x,&E_Sel_y);
-                            lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
-                            lcd.refresh();
                             ThisThread::sleep_for(100ms); 
                         }
                         else { // Card 6
-                            // printf("Suit for card %d: %d\n", 5, E_CardArray[5].get_suit());
-                            lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
                             TurnCard(Card_x, Card_y, E_CardArray[5].get_suit());
                             Card_two = E_CardArray[5].get_suit();
-                            EasyInput(&E_Sel_x,&E_Sel_y);
-                            lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
-                            lcd.refresh();
                             ThisThread::sleep_for(100ms); 
                         }
                     }   
-            else {
-                    if (SelCard_x == 1) { // Card 1
-                    // printf("Suit for card %d: %d\n", 0, E_CardArray[0].get_suit());
-                        lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
-                        TurnCard(Card_x, Card_y, E_CardArray[0].get_suit());
-                        Suit Card_two = E_CardArray[0].get_suit();
-                        EasyInput(&E_Sel_x,&E_Sel_y);
-                        lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
-                        lcd.refresh();
-                        ThisThread::sleep_for(100ms); 
+                    else {
+                        if (SelCard_x == 1) { // Card 1
+                            TurnCard(Card_x, Card_y, E_CardArray[0].get_suit());
+                            Card_two = E_CardArray[0].get_suit();
+                            ThisThread::sleep_for(100ms); 
+                        }
+                        else if (SelCard_x == 2) { // Card 3
+                            TurnCard(Card_x, Card_y, E_CardArray[2].get_suit());
+                            Card_two = E_CardArray[2].get_suit();
+                            ThisThread::sleep_for(100ms); 
+                        }
+                        else { // Card 5
+                            TurnCard(Card_x, Card_y, E_CardArray[4].get_suit());
+                            Card_two = E_CardArray[4].get_suit();
+                            ThisThread::sleep_for(100ms); 
+                        }
                     }
-                    else if (SelCard_x == 2) { // Card 3
-                    //  printf("Suit for card %d: %d\n", 2, E_CardArray[2].get_suit());
-                        lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
-                        TurnCard(Card_x, Card_y, E_CardArray[2].get_suit());
-                        Suit Card_two = E_CardArray[2].get_suit();
-                        EasyInput(&E_Sel_x,&E_Sel_y);
-                        lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
-                        lcd.refresh();
-                        ThisThread::sleep_for(100ms); 
-                    }
-                    else { // Card 5
-                    //   printf("Suit for card %d: %d\n", 4, E_CardArray[4].get_suit());
-                        lcd.drawSprite(Old_E_Sel_x,Old_E_Sel_y,18,15,(int *)CardBlink);
-                        TurnCard(Card_x, Card_y, E_CardArray[4].get_suit());
-                        Suit Card_two = E_CardArray[4].get_suit();
-                        EasyInput(&E_Sel_x,&E_Sel_y);
-                        lcd.drawRect(E_Sel_x,E_Sel_y,15,18,FILL_TRANSPARENT);
-                        lcd.refresh();
-                        ThisThread::sleep_for(100ms); 
-                    }
+                    break;
+                }
+                
+                lcd.drawLine(Old_E_Sel_x,Old_E_Sel_y,Old_E_Sel_x + 14,Old_E_Sel_y,0);
+                EasyInput(&E_Sel_x,&E_Sel_y);
+                lcd.drawLine(E_Sel_x,E_Sel_y,E_Sel_x + 14,E_Sel_y,1);
+                lcd.refresh();
+                ThisThread::sleep_for(200ms);
+ 
             }
+            
             // Flipped Second card over and stored suit still in while oop as counter 2 isnt 2    
             printf("Suit for card %d: %d\n", 1, Card_one);
             printf("Suit for card %d: %d\n", 2, Card_two);
