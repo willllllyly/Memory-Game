@@ -24,9 +24,14 @@ void HardInput();
 void EasySelect(Card E_CardArray[6]);
 void MediumSelect();
 void HardSelect();
+void WinScreen();
+void LossScreen();
 volatile int ButtonFlag = 0; // Flag for turning it on and off
 volatile int JoystickButtonFlag = 0; // Flag for exiting MenuSelect into game mode 
-int State = 0;
+int StateG = 0;
+int StateR1 = 0;
+int StateR2 = 0;
+int StateR3 = 0;
 volatile int ButtonCount = 0;
 
 // Objects
@@ -274,7 +279,10 @@ const int Front4[14][11]={
 int main() {
     
     Button.rise(&Button_isr);
-    GreenLED = State;
+    GreenLED = StateG;
+    RedLED1 = !StateR1;
+    RedLED2 = !StateR2;
+    RedLED3 = !StateR1;
     Joystick_Button.fall(&JoyButton_isr);
     Joystick_Button.mode(PullUp);
 
@@ -286,8 +294,14 @@ int main() {
             ButtonFlag = 0;
             ButtonCount++;
             if (ButtonCount % 2 ==1) {
-                State = 1;
-                GreenLED = State;
+                StateG = 1;
+                StateR1 = 0;
+                StateR2 = 0;
+                StateR3 = 0;
+                RedLED1 = StateR1;
+                RedLED2 = StateR2;
+                RedLED3 = StateR3;
+                GreenLED = StateG;
                 init(); // Initialise the device and certain objects
             // ModeHard();
             // LoadingScreen();
@@ -297,8 +311,10 @@ int main() {
                 ModeEasy();
             }
             else {
-                State = 0;
-                GreenLED = State; 
+                StateG = 0;
+                GreenLED = StateG;
+                lcd.clear();
+                sleep(); 
             }
         }
 
@@ -377,6 +393,22 @@ void MenuScreen() {
     lcd.printString("  --MEDIUM---",0,4);
     lcd.printString("  ---HARD----",0,5);
     lcd.refresh();
+}
+void WinScreen() {
+    lcd.clear();
+    lcd.printString("  WELL DONE",0,1);
+    lcd.printString("==============",0,2);
+    lcd.printString("   YOU WON",0,3);
+    lcd.printString("  THE GAME!!",0,4);
+    lcd.refresh();
+}
+void LossScreen() {
+    lcd.clear();
+    lcd.printString("  INCORRECT",0,1);
+    lcd.printString("  GAME OVER",0,2);
+    lcd.printString("==============",0,3);
+    lcd.printString("   UNLUCKY",0,4);
+    lcd.refresh();    
 }
 void ModeEasy() {
     lcd.clear();
@@ -744,16 +776,6 @@ void EasySelect(Card E_CardArray[5]) {
    ThisThread::sleep_for(250ms);
    lcd.drawLine(7,3,21,3,1);
    lcd.refresh();
-   
-   /* lcd.drawRect(7,3,15,18,FILL_TRANSPARENT);
-    lcd.refresh();
-    ThisThread::sleep_for(450ms);
-    lcd.drawSprite(7,3,18,15,(int *)CardBlink);
-    lcd.drawSprite(9,5,14,11,(int *)Back1);
-    lcd.refresh();
-    ThisThread::sleep_for(250ms);
-    lcd.drawRect(7,3,15,18,FILL_TRANSPARENT);
-    lcd.refresh();*/
 
     int E_Sel_x = 7;
     int E_Sel_y = 3;
@@ -768,13 +790,14 @@ void EasySelect(Card E_CardArray[5]) {
     int Counter2 = 0;
     int Counter3 = 0;
     int MatchedPairs = 0;
+    int Lives = 0;
     bool AllPairsMatched = false;
 
     Suit Card_one = UNASSIGNED;
     Suit Card_two = UNASSIGNED;
 
     while(!AllPairsMatched) {
-        while(Counter2 < 1) {
+        while(MatchedPairs < 3) {
             while(Counter1 == 0) {    
                 int Old_E_Sel_x = E_Sel_x;
                 int Old_E_Sel_y = E_Sel_y;
@@ -889,25 +912,32 @@ void EasySelect(Card E_CardArray[5]) {
             }
             
             // Flipped Second card over and stored suit still in while oop as counter 2 isnt 2    
-            printf("Suit for card %d: %d\n", 1, Card_one);
-            printf("Suit for card %d: %d\n", 2, Card_two);
+           // printf("Suit for card %d: %d\n", 1, Card_one);
+            //printf("Suit for card %d: %d\n", 2, Card_two);
+                
             if (Card_two == Card_one) {
                 lcd.drawSprite(x1,y1,14,11,(int *)Empty);
                 lcd.drawSprite(x2,y2,14,11,(int *)Empty);
                 lcd.refresh();
+                Counter1 = 0;
+                MatchedPairs++;
             }
             else  {
-                lcd.clear();
-                lcd.printString("  INCORRECT",0,2);
-                lcd.printString("  GAME OVER",0,2);
-                lcd.printString("==============",0,3);
-                lcd.printString("   UNLUCKY",0,4);
-                lcd.refresh();
-                Counter2++;
+                Lives++;
+                RedLED1 = !StateR1;
+                RedLED2 = !StateR2;
+                RedLED3 = !StateR1;
+                MatchedPairs = 3;
             }
-            
-            
         }
+        if (Lives == 1) {
+            LossScreen();
+            AllPairsMatched = true;
+        }
+        else {
+            WinScreen();
+            AllPairsMatched = true;    
+        }   
     }    
 }
 void MediumInput(int* M_Sel_x, int*M_Sel_y) {
