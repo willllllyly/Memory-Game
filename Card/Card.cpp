@@ -1,7 +1,7 @@
 #include "Card.h"
 
 void Card::generate_suit() {
-    int RanNum = rand() % 40 + -20;
+    int RanNum = rand() % 41 + -20;
 
         if (RanNum > 0) {
                 if (RanNum % 2 == 0) {

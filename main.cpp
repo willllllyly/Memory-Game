@@ -27,6 +27,7 @@ void HardSelect();
 volatile int ButtonFlag = 0; // Flag for turning it on and off
 volatile int JoystickButtonFlag = 0; // Flag for exiting MenuSelect into game mode 
 int State = 0;
+volatile int ButtonCount = 0;
 
 // Objects
 N5110 lcd(PC_7, PA_9, PB_10, PB_5, PB_3, PA_10);
@@ -270,15 +271,22 @@ int main() {
         if (ButtonFlag) {
             ThisThread::sleep_for(250ms);
             ButtonFlag = 0;
-            State = !State;
-            GreenLED = State;
-            init(); // Initialise the device and certain objects
-           // ModeHard();
-           // LoadingScreen();
-            //HowToPlay();
-           // MenuSelect();
-           // TurnCardDiamonds();           
-            ModeEasy();
+            ButtonCount++;
+            if (ButtonCount % 2 ==1) {
+                State = 1;
+                GreenLED = State;
+                init(); // Initialise the device and certain objects
+            // ModeHard();
+            // LoadingScreen();
+                //HowToPlay();
+            // MenuSelect();
+            // TurnCardDiamonds();           
+                ModeEasy();
+            }
+            else {
+                State = 0;
+                GreenLED = State; 
+            }
         }
 
         sleep();    
@@ -465,7 +473,10 @@ void ModeEasy() {
             lcd.refresh();
         }
     }
-    EasySelect(&E_CardArray[6]);
+    for (int i = 0; i < 6; ++i) {
+        printf("Card %d: %d\n", i, E_CardArray[i].get_suit());
+    }
+    EasySelect(&E_CardArray[5]);
 }
 void ModeMedium() {
     lcd.clear();
@@ -725,7 +736,7 @@ void EasyInput(int* E_Sel_x, int*E_Sel_y) {
         }
     }
 }
-void EasySelect(Card E_CardArray[6]) {
+void EasySelect(Card E_CardArray[5]) {
     lcd.drawRect(7,3,15,18,FILL_TRANSPARENT);
     lcd.refresh();
     ThisThread::sleep_for(450ms);
@@ -767,30 +778,32 @@ void EasySelect(Card E_CardArray[6]) {
    // }
     float SelCard_x = (Card_x / 28.0f) + (19.0/28.0);
     float SelCard_y = Card_y / 29.0f;
-    printf("Card x%d,\n", Card_x); // Print outside of the loop
-    printf("Card y%d,\n", Card_y);
-    printf("Card x%f,\n", SelCard_x); // Print outside of the loop
-    printf("Card y%f,\n", SelCard_y);
     if (SelCard_y == 1) {
         if (SelCard_x == 1) { // Card 2
+            printf("Suit for card %d: %d\n", 2, E_CardArray[1].get_suit());
             TurnCard(Card_x, Card_y, E_CardArray[1].get_suit());
         }
         else if (SelCard_x == 2) { // Card 4
+            printf("Suit for card %d: %d\n", 4, E_CardArray[3].get_suit());
             TurnCard(Card_x, Card_y, E_CardArray[3].get_suit());
         }
         else { // Card 6
+            printf("Suit for card %d: %d\n", 6, E_CardArray[5].get_suit());
             TurnCard(Card_x, Card_y, E_CardArray[5].get_suit());
         }
     }
     else {
         if (SelCard_x == 1) { // Card 1
-            TurnCard(Card_x, Card_y, E_CardArray[2].get_suit());
+            printf("Suit for card %d: %d\n", 1, E_CardArray[0].get_suit());
+            TurnCard(Card_x, Card_y, E_CardArray[0].get_suit());
         }
         else if (SelCard_x == 2) { // Card 3
-            TurnCard(Card_x, Card_y, E_CardArray[4].get_suit());
+            printf("Suit for card %d: %d\n", 3, E_CardArray[2].get_suit());
+            TurnCard(Card_x, Card_y, E_CardArray[2].get_suit());
         }
         else { // Card 5
-            TurnCard(Card_x, Card_y, E_CardArray[6].get_suit());
+            printf("Suit for card %d: %d\n", 5, E_CardArray[4].get_suit());
+            TurnCard(Card_x, Card_y, E_CardArray[4].get_suit());
         }
     }
     }    
