@@ -306,7 +306,7 @@ int main() {
                 //HowToPlay();
             // MenuSelect();
             // TurnCardDiamonds();           
-                ModeMedium();
+                ModeHard();
             }
             else {
                 StateG = 0;
@@ -816,30 +816,30 @@ void MenuSelect() {
 void TurnCard(int Card_x, int Card_y, Suit suit) {
     
     if (suit == Hearts) {
-        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Front4);
+        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Front1);
         lcd.refresh();
-        ThisThread::sleep_for(250ms);
+        ThisThread::sleep_for(150ms);
         lcd.drawSprite(Card_x,Card_y,14,11,(int *)Heart);
         lcd.refresh();
     }
     else if (suit == Spades) {
-        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Front4);
+        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Front1);
         lcd.refresh();
-        ThisThread::sleep_for(250ms);        
+        ThisThread::sleep_for(150ms);        
         lcd.drawSprite(Card_x,Card_y,14,11,(int *)Spade);
         lcd.refresh();
     }
     else if (suit == Diamonds) {
-        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Front4);
+        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Front1);
         lcd.refresh();
-        ThisThread::sleep_for(250ms);        
+        ThisThread::sleep_for(150ms);        
         lcd.drawSprite(Card_x,Card_y,14,11,(int *)Diamond);
         lcd.refresh();
     }
     else {
-        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Front4);
+        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Front1);
         lcd.refresh();
-        ThisThread::sleep_for(250ms);        
+        ThisThread::sleep_for(150ms);        
         lcd.drawSprite(Card_x,Card_y,14,11,(int *)Club);
         lcd.refresh();
     }
@@ -1146,7 +1146,7 @@ void MediumSelect(Card M_CardArray[7]) {
                             Card_one = M_CardArray[3].get_suit();
                             ThisThread::sleep_for(100ms); 
                         }
-                        else if (SelCard_x == 2) { // Card 6
+                        else if (SelCard_x == 3) { // Card 6
                             TurnCard(Card_x, Card_y, M_CardArray[5].get_suit());
                             Card_one = M_CardArray[5].get_suit();
                             ThisThread::sleep_for(100ms); 
@@ -1168,7 +1168,7 @@ void MediumSelect(Card M_CardArray[7]) {
                             Card_one = M_CardArray[2].get_suit();
                             ThisThread::sleep_for(100ms); 
                         }
-                        else if (SelCard_x == 2) { // Card 5
+                        else if (SelCard_x == 3) { // Card 5
                             TurnCard(Card_x, Card_y, M_CardArray[4].get_suit());
                             Card_one = M_CardArray[4].get_suit();
                             ThisThread::sleep_for(100ms);
@@ -1211,7 +1211,7 @@ void MediumSelect(Card M_CardArray[7]) {
                             Card_two = M_CardArray[3].get_suit();
                             ThisThread::sleep_for(100ms); 
                         }
-                        else if (SelCard_x == 2) { // Card 6
+                        else if (SelCard_x == 3) { // Card 6
                             TurnCard(Card_x, Card_y, M_CardArray[5].get_suit());
                             Card_two = M_CardArray[5].get_suit();
                             ThisThread::sleep_for(100ms); 
@@ -1233,7 +1233,7 @@ void MediumSelect(Card M_CardArray[7]) {
                             Card_two = M_CardArray[2].get_suit();
                             ThisThread::sleep_for(100ms); 
                         }
-                        else if (SelCard_x == 2) { // Card 5
+                        else if (SelCard_x == 3) { // Card 5
                             TurnCard(Card_x, Card_y, M_CardArray[4].get_suit());
                             Card_two = M_CardArray[4].get_suit();
                             ThisThread::sleep_for(100ms);
@@ -1323,34 +1323,215 @@ void HardInput(int* H_Sel_x, int*H_Sel_y) {
     
 }
 void HardSelect(Card H_CardArray[9]) {
-    lcd.drawRect(2,3,15,18,FILL_TRANSPARENT);
+    lcd.drawLine(2,3,16,3,1);
     lcd.refresh();
     ThisThread::sleep_for(450ms);
-    lcd.drawSprite(2,3,18,15,(int *)CardBlink);
-    lcd.drawSprite(4,5,14,11,(int *)Back1);
+    lcd.drawLine(2,3,16,3,0);
     lcd.refresh();
     ThisThread::sleep_for(250ms);
-    lcd.drawRect(2,3,15,18,FILL_TRANSPARENT);
+    lcd.drawLine(2,3,16,3,1);
     lcd.refresh();
 
     int H_Sel_x = 2;
     int H_Sel_y = 3;
+    int Card_x = 0;
+    int Card_y = 0;
+    int x1 = 0;
+    int x2 = 0;
+    int y1 = 0;
+    int y2 = 0;
 
-    while(1) {
-        if(JoystickButtonFlag) {
-            ThisThread::sleep_for(250ms);
-            JoystickButtonFlag = 0;
-            break;
+    int Counter1 = 0;
+    int Counter2 = 0;
+    int Counter3 = 0;
+    int MatchedPairs = 0;
+    int Lives = 0;
+    bool AllPairsMatched = false;
+
+    Suit Card_one = UNASSIGNED;
+    Suit Card_two = UNASSIGNED;
+
+    while(!AllPairsMatched) {
+        while(MatchedPairs < 5) {
+            while(Counter1 == 0) {    
+                int Old_H_Sel_x = H_Sel_x;
+                int Old_H_Sel_y = H_Sel_y;
+                Card_x = H_Sel_x + 2;
+                Card_y = H_Sel_y + 2;
+                float SelCard_x = (Card_x - 4.0) / 16 + 1.0;
+                float SelCard_y = Card_y / 29.0f;
+                if(JoystickButtonFlag) {
+                    ThisThread::sleep_for(250ms);
+                    JoystickButtonFlag = 0;
+                    Counter1++;
+                    x1 = Card_x;
+                    y1 = Card_y;
+                    if (SelCard_y == 1) {
+                        if (SelCard_x == 1) { // Card 2
+                            TurnCard(Card_x, Card_y, H_CardArray[1].get_suit());
+                            Card_one = H_CardArray[1].get_suit(); 
+                            ThisThread::sleep_for(100ms);                    
+                        }
+                        else if (SelCard_x == 2) { // Card 4
+                            TurnCard(Card_x, Card_y, H_CardArray[3].get_suit());
+                            Card_one = H_CardArray[3].get_suit();
+                            ThisThread::sleep_for(100ms); 
+                        }
+                        else if (SelCard_x == 3) { // Card 6
+                            TurnCard(Card_x, Card_y, H_CardArray[5].get_suit());
+                            Card_one = H_CardArray[5].get_suit();
+                            ThisThread::sleep_for(100ms); 
+                        }
+                        else if (SelCard_x == 4) { // Card 8
+                            TurnCard(Card_x, Card_y, H_CardArray[7].get_suit());
+                            Card_one = H_CardArray[7].get_suit();
+                            ThisThread::sleep_for(100ms);
+                        }                        
+                        else { // Card 10
+                            TurnCard(Card_x, Card_y, H_CardArray[9].get_suit());
+                            Card_one = H_CardArray[9].get_suit();                           
+                            ThisThread::sleep_for(100ms); 
+                        }
+                    }   
+                    else {
+                        if (SelCard_x == 1) { // Card 1                        
+                            TurnCard(Card_x, Card_y, H_CardArray[0].get_suit());
+                            Card_one = H_CardArray[0].get_suit();
+                            ThisThread::sleep_for(100ms); 
+                        }
+                        else if (SelCard_x == 2) { // Card 3
+                            TurnCard(Card_x, Card_y, H_CardArray[2].get_suit());
+                            Card_one = H_CardArray[2].get_suit();
+                            ThisThread::sleep_for(100ms); 
+                        }
+                        else if (SelCard_x == 3) { // Card 5
+                            TurnCard(Card_x, Card_y, H_CardArray[4].get_suit());
+                            Card_one = H_CardArray[4].get_suit();
+                            ThisThread::sleep_for(100ms);
+                        }
+                        else if (SelCard_x == 4) { // Card 7
+                            TurnCard(Card_x, Card_y, H_CardArray[6].get_suit());
+                            Card_one = H_CardArray[6].get_suit();
+                            ThisThread::sleep_for(100ms);
+                        }                        
+                        else { // Card 9
+                            TurnCard(Card_x, Card_y, H_CardArray[8].get_suit());
+                            Card_one = H_CardArray[8].get_suit();
+                            ThisThread::sleep_for(100ms); 
+                        }
+                    }        
+                 break;
+                }
+            
+                lcd.drawLine(Old_H_Sel_x,Old_H_Sel_y,Old_H_Sel_x + 14,Old_H_Sel_y,0);
+                HardInput(&H_Sel_x,&H_Sel_y);
+                lcd.drawLine(H_Sel_x,H_Sel_y,H_Sel_x + 14,H_Sel_y,1);
+                lcd.refresh();
+                ThisThread::sleep_for(200ms);
+            }
+            while(Counter1 == 1) {
+                int Old_H_Sel_x = H_Sel_x;
+                int Old_H_Sel_y = H_Sel_y;
+                Card_x = H_Sel_x + 2;
+                Card_y = H_Sel_y + 2;
+                float SelCard_x = (Card_x - 4.0) / 16 + 1.0;
+                float SelCard_y = Card_y / 29.0f;
+                if(JoystickButtonFlag) {
+                    ThisThread::sleep_for(250ms);
+                    JoystickButtonFlag = 0;
+                    x2 = Card_x;
+                    y2 = Card_y;
+                    if (SelCard_y == 1) {
+                        if (SelCard_x == 1) { // Card 2
+                            TurnCard(Card_x, Card_y, H_CardArray[1].get_suit());
+                            Card_two = H_CardArray[1].get_suit(); 
+                            ThisThread::sleep_for(100ms);                    
+                        }
+                        else if (SelCard_x == 2) { // Card 4
+                            TurnCard(Card_x, Card_y, H_CardArray[3].get_suit());
+                            Card_two = H_CardArray[3].get_suit();
+                            ThisThread::sleep_for(100ms); 
+                        }
+                        else if (SelCard_x == 3) { // Card 6
+                            TurnCard(Card_x, Card_y, H_CardArray[5].get_suit());
+                            Card_two = H_CardArray[5].get_suit();
+                            ThisThread::sleep_for(100ms); 
+                        }
+                        else if (SelCard_x == 4) { // Card 8
+                            TurnCard(Card_x, Card_y, H_CardArray[7].get_suit());
+                            Card_two = H_CardArray[7].get_suit();
+                            ThisThread::sleep_for(100ms);
+                        }                        
+                        else { // Card 10
+                            TurnCard(Card_x, Card_y, H_CardArray[9].get_suit());
+                            Card_two = H_CardArray[9].get_suit();                           
+                            ThisThread::sleep_for(100ms); 
+                        }
+                    }   
+                    else {
+                        if (SelCard_x == 1) { // Card 1                        
+                            TurnCard(Card_x, Card_y, H_CardArray[0].get_suit());
+                            Card_two = H_CardArray[0].get_suit();
+                            ThisThread::sleep_for(100ms); 
+                        }
+                        else if (SelCard_x == 2) { // Card 3
+                            TurnCard(Card_x, Card_y, H_CardArray[2].get_suit());
+                            Card_two = H_CardArray[2].get_suit();
+                            ThisThread::sleep_for(100ms); 
+                        }
+                        else if (SelCard_x == 3) { // Card 5
+                            TurnCard(Card_x, Card_y, H_CardArray[4].get_suit());
+                            Card_two = H_CardArray[4].get_suit();
+                            ThisThread::sleep_for(100ms);
+                        }
+                        else if (SelCard_x == 4) { // Card 7
+                            TurnCard(Card_x, Card_y, H_CardArray[6].get_suit());
+                            Card_two = H_CardArray[6].get_suit();
+                            ThisThread::sleep_for(100ms);
+                        }                        
+                        else { // Card 9
+                            TurnCard(Card_x, Card_y, H_CardArray[8].get_suit());
+                            Card_two = H_CardArray[8].get_suit();
+                            ThisThread::sleep_for(100ms); 
+                        }
+                    }
+                    break;
+                }
+                
+                lcd.drawLine(Old_H_Sel_x,Old_H_Sel_y,Old_H_Sel_x + 14,Old_H_Sel_y,0);
+                HardInput(&H_Sel_x,&H_Sel_y);
+                lcd.drawLine(H_Sel_x,H_Sel_y,H_Sel_x + 14,H_Sel_y,1);
+                lcd.refresh();
+                ThisThread::sleep_for(200ms);
+ 
+            }
+            
+            // Flipped Second card over and stored suit still in while oop as counter 2 isnt 2    
+           // printf("Suit for card %d: %d\n", 1, Card_one);
+            //printf("Suit for card %d: %d\n", 2, Card_two);
+                
+            if (Card_two == Card_one) {
+                lcd.drawSprite(x1,y1,14,11,(int *)Empty);
+                lcd.drawSprite(x2,y2,14,11,(int *)Empty);
+                lcd.refresh();
+                Counter1 = 0;
+                MatchedPairs++;
+            }
+            else  {
+                Lives++;
+                RedLED1 = !StateR1;
+                RedLED2 = !StateR2;
+                RedLED3 = !StateR1;
+                MatchedPairs = 5;
+            }
         }
-        int Old_H_Sel_x = H_Sel_x;
-        int Old_H_Sel_y = H_Sel_y;
-        int Card_x = H_Sel_x + 2;
-        int Card_y = H_Sel_y + 2;
-        lcd.drawSprite(Old_H_Sel_x,Old_H_Sel_y,18,15,(int *)CardBlink);
-        lcd.drawSprite(Card_x,Card_y,14,11,(int *)Back1);
-        HardInput(&H_Sel_x,&H_Sel_y);
-        lcd.drawRect(H_Sel_x,H_Sel_y,15,18,FILL_TRANSPARENT);
-        lcd.refresh();
-        ThisThread::sleep_for(150ms);
+        if (Lives == 1) {
+            LossScreen();
+            AllPairsMatched = true;
+        }
+        else {
+            WinScreen();
+            AllPairsMatched = true;    
+        }   
     }
 }
